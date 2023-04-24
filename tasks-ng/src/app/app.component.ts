@@ -1,6 +1,5 @@
 import {Component, DoCheck} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthenticationService} from "./services/authentication.service";
 
 @Component({
   selector: 'app-root',
@@ -16,11 +15,7 @@ export class AppComponent {
 
   ngDoCheck():void{
     let currentRoute =this.router.url;
-    if (currentRoute == "/login" || currentRoute == "/register"){
-        this.isMainWindowOn=false;
-    }else {
-      this.isMainWindowOn=true;
-    }
+    this.isMainWindowOn = !(currentRoute == "/login" || currentRoute == "/register");
   }
 
 }
