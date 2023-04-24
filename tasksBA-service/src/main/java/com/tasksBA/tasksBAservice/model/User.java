@@ -1,28 +1,37 @@
 package com.tasksBA.tasksBAservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
-@Table(name = "users",uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
+@Data
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String username;
     private String email;
+    @JsonIgnore
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "users_assigned_tasks",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tasks_id")
+    )
+    private Set<Task> assignedTasks = new HashSet<>();
 
     public User(String username, String email, String password, Role role) {
         this.username = username;
@@ -34,13 +43,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
