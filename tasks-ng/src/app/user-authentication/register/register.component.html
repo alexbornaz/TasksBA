@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h4>Register</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" id="username" formControlName="username">
+          <div
+            *ngIf="registerForm.controls.username.invalid && (registerForm.controls.username.dirty || registerForm.controls.username.touched)"
+            class="invalid-feedback">
+            <div *ngIf="registerForm.controls.username.errors?.['required']">
+              <p>Username is required.</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" formControlName="email">
+          <div
+            *ngIf="registerForm.controls.email.invalid && (registerForm.controls.email.dirty || registerForm.controls.email.touched)"
+            class="invalid-feedback">
+            <div *ngIf="registerForm.controls.email.errors?.['required']">
+              Email is required.
+            </div>
+            <div *ngIf="registerForm.controls.email.errors?.['email']">
+              Please enter a valid email address.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" formControlName="password">
+          <div
+            *ngIf="registerForm.controls.password.invalid && (registerForm.controls.password.dirty || registerForm.controls.password.touched)"
+            class="invalid-feedback">
+            <div *ngIf="registerForm.controls.password.errors?.['required']">
+              Password is required.
+            </div>
+            <div *ngIf="registerForm.controls.password.errors?.['minlength']">
+              Password must be at least 8 characters long.
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showMessage">
+          <p class="invalid-feedback">{{serverMessage}}</p>
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+          <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+        </div>
+        <div>
+          <a routerLink="/login">Already have an account? Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

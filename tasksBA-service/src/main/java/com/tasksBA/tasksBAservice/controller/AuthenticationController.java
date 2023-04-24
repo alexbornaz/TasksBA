@@ -27,7 +27,7 @@ public class AuthenticationController {
             String token = userAuthService.registerUser(signUpReq);
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
         } catch (AuthenticationException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
+            return ResponseEntity.ok().body(new MessageResp(e.getCause().getMessage()));
         }
     }
 
@@ -37,7 +37,7 @@ public class AuthenticationController {
             String token = userAuthService.login(loginReq);
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
         } catch (AuthenticationException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
+            return ResponseEntity.ok().body(new MessageResp(e.getCause().getMessage()));
         }
     }
 }

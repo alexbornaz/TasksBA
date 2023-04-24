@@ -29,7 +29,7 @@ public class User implements UserDetails {
     @JoinTable(
             name = "users_assigned_tasks",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "tasks_id")
+            inverseJoinColumns = @JoinColumn(name = "task_id")
     )
     private Set<Task> assignedTasks = new HashSet<>();
 
