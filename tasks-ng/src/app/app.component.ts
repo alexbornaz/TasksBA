@@ -11,16 +11,16 @@ export class AppComponent {
   title = 'tasks-ng';
   isMainWindowOn = false;
 
-  constructor(private router: Router,private authService:AuthenticationService) {
+  constructor(private router: Router) {
   }
 
-  // ngDoCheck():void{
-  //   let currentRoute =this.router.url;
-  //   if (currentRoute == "/login" || currentRoute == "/register"){
-  //       this.isMainWindowOn=false;
-  //   }else {
-  //     this.isMainWindowOn=true;
-  //   }
-  // }
+  ngDoCheck():void{
+    let currentRoute =this.router.url;
+    if (currentRoute == "/login" || currentRoute == "/register"){
+        this.isMainWindowOn=false;
+    }else {
+      this.isMainWindowOn=true;
+    }
+  }
 
 }

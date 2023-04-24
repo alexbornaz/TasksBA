@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {map, Observable} from "rxjs";
+import { Observable} from "rxjs";
 import {RegisterReq} from "../interfaces/RegisterReq";
 import {LoginReq} from "../interfaces/LoginReq";
 

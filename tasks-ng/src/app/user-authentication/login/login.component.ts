@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {RegisterReq} from "../../interfaces/RegisterReq";
 import {LoginReq} from "../../interfaces/LoginReq";
 
 @Component({
