@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import { Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {RegisterReq} from "../interfaces/RegisterReq";
 import {LoginReq} from "../interfaces/LoginReq";
 
@@ -20,8 +20,8 @@ export class AuthenticationService {
     return this.http.post(`${this.url}/login`, loginReq, {observe: 'response'});
   }
 
-  isLoggedIn():boolean{
-    return localStorage.getItem("token")!=null;
+  isLoggedIn(): boolean {
+    return localStorage.getItem("token") != null;
   }
 
   logout(): void {
@@ -30,5 +30,12 @@ export class AuthenticationService {
 
   register(registerReq: RegisterReq): Observable<HttpResponse<any>> {
     return this.http.post(`${this.url}/register`, registerReq, {observe: 'response'});
+  }
+
+  getToken(): string | null {
+    if (this.isLoggedIn()){
+      return localStorage.getItem("token");
+    }
+    return null;
   }
 }

@@ -1,0 +1,24 @@
+<div *ngIf="(tasks$ | async)?.length; else noTasks">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">Subject</th>
+      <th scope="col">Due Date</th>
+      <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let task of tasks$ | async">
+      <td><a [routerLink]="['/tasks',task.id]">{{ task.subject }}</a></td>
+      <td>{{ task.dueDate }}</td>
+      <td>{{ task.status }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<ng-template #noTasks>
+  <p>You have no tasks.</p>
+</ng-template>
+

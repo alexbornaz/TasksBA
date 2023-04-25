@@ -3,13 +3,12 @@ import {RouterModule, Routes} from '@angular/router';
 import {RegisterComponent} from "./user-authentication/register/register.component";
 import {LoginComponent} from "./user-authentication/login/login.component";
 import {AuthGuard} from "./guards/auth.guard";
-import {AppComponent} from "./app.component";
 import {LoginRegisterGuard} from "./guards/login-register.guard";
 
 const routes: Routes = [
-  {path: '', component: AppComponent, canActivate: [AuthGuard]},
-  {path: 'register', component: RegisterComponent, canActivate:[LoginRegisterGuard]},
-  {path: 'login', component: LoginComponent,canActivate:[LoginRegisterGuard]}
+  {path: '', loadChildren: () => import('./tasks/tasks.module').then(m => m.TasksModule), canActivate: [AuthGuard]},
+  {path: 'register', component: RegisterComponent, canActivate: [LoginRegisterGuard]},
+  {path: 'login', component: LoginComponent, canActivate: [LoginRegisterGuard]}
 ];
 
 @NgModule({
