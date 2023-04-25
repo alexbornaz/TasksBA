@@ -1,13 +1,15 @@
 package com.tasksBA.tasksBAservice.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "tasks")
 public class Task {
@@ -19,12 +21,14 @@ public class Task {
 
     private Status status;
     @ManyToOne(optional = false)
+    @JoinColumn(name = "assigned_to_username", referencedColumnName = "username")
     private User assignedTo;
 
-    public Task(String subject, Date dueDate) {
+    public Task(String subject, Date dueDate,User assignedTo) {
         this.subject = subject;
         this.dueDate = dueDate;
         this.status = Status.NEW;
+        this.assignedTo=assignedTo;
     }
 
 
