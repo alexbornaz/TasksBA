@@ -52,4 +52,15 @@ public class TaskServiceImpl implements TaskService{
         userService.saveUser(user);
         taskRepository.delete(task);
     }
+
+    @Override
+    public void editTask(TaskDTO taskDTO) {
+        User user = userService.getUserByUsername(taskDTO.getAssignedTo()).get();
+        Task task = taskRepository.findById(taskDTO.getId()).get();
+        task.setSubject(taskDTO.getSubject());
+        task.setDueDate(taskDTO.getDueDate());
+        task.setStatus(taskDTO.getStatus());
+        task.setAssignedTo(user);
+        taskRepository.save(task);
+    }
 }

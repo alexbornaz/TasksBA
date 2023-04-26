@@ -13,4 +13,6 @@ public interface TaskService {
 
     void createTask(TaskDTO taskDTO);
     void deleteTask(Task task);
+
+    void editTask(TaskDTO taskDTO);
 }

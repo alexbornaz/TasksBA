@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TaskService} from "../../services/task.service";
 import {map, Observable, of} from "rxjs";
 import {Task} from 'src/app/interfaces/Task';
@@ -8,7 +8,7 @@ import {Task} from 'src/app/interfaces/Task';
   templateUrl: './all-tasks.component.html',
   styleUrls: ['./all-tasks.component.css']
 })
-export class AllTasksComponent {
+export class AllTasksComponent implements OnInit{
   tasks: Observable<Task[]> = of([])
 
   constructor(private taskService: TaskService) {

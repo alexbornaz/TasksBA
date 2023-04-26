@@ -1,1 +1,57 @@
-<p>task-detail works!</p>
+<div class="container my-4">
+  <h2 *ngIf="editableMode" class="d-flex justify-content-end">Task ID: {{ (task | async)?.id }}</h2>
+
+  <form [formGroup]="taskForm">
+    <div class="mb-3">
+      <label for="subject" class="form-label">Subject</label>
+      <input type="text" class="form-control" id="subject" formControlName="subject"
+      >
+      <div
+        *ngIf="taskForm.controls['subject'].invalid && (taskForm.controls['subject'].dirty || taskForm.controls['subject'].touched)"
+        class="text-danger">
+        <div *ngIf="taskForm.controls['subject'].errors?.['required']">Subject is required</div>
+        <div *ngIf="taskForm.controls['subject'].errors?.['maxlength']">Subject should be at most 100 characters</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="dueDate" class="form-label">Due Date</label>
+      <input type="date" class="form-control" id="dueDate" formControlName="dueDate">
+      <div
+        *ngIf="taskForm.controls['dueDate'].invalid && (taskForm.controls['dueDate'].dirty || taskForm.controls['dueDate'].touched)"
+        class="text-danger">
+        Due date is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" id="status" formControlName="status">
+        <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
+      </select>
+      <div
+        *ngIf="taskForm.controls['status'].invalid && (taskForm.controls['status'].dirty || taskForm.controls['status'].touched)"
+        class="text-danger">
+        Status is required
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="assignedTo" class="form-label">Assigned To</label>
+      <input type="text" class="form-control" id="assignedTo" formControlName="assignedTo">
+    </div>
+
+    <button type="button" class="btn btn-primary"
+            *ngIf="!editableMode"
+            (click)="onEdit()">Edit
+    </button>
+    <button type="submit" class="btn btn-primary"
+            *ngIf="editableMode"
+            (click)="onSave()">Save
+    </button>
+    <button type="button" class="btn btn-secondary"
+            *ngIf="editableMode"
+            (click)="onCancel()">Discard Changes
+    </button>
+  </form>
+</div>

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Task} from "../../interfaces/Task";
 import {map, Observable, of} from "rxjs";
@@ -8,7 +8,7 @@ import {map, Observable, of} from "rxjs";
   templateUrl: './my-tasks.component.html',
   styleUrls: ['./my-tasks.component.css']
 })
-export class MyTasksComponent {
+export class MyTasksComponent implements OnInit{
   private username?: string
   tasks$: Observable<Task[]>=of([])
 

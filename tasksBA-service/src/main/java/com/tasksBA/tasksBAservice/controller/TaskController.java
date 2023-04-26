@@ -1,5 +1,6 @@
 package com.tasksBA.tasksBAservice.controller;
 
+import com.tasksBA.tasksBAservice.dto.MessageResp;
 import com.tasksBA.tasksBAservice.dto.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
@@ -7,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
+
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -38,6 +39,16 @@ public class TaskController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok().body("Couldn't add task");
+        }
+    }
+    @PutMapping("/edit")
+    public ResponseEntity<?> editTask(@RequestBody TaskDTO taskDTO){
+        try{
+            taskService.editTask(taskDTO);
+            return ResponseEntity.ok().body(new MessageResp("Task edited with success"));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.ok().body(new MessageResp("Task edit failed"));
         }
     }
 }
