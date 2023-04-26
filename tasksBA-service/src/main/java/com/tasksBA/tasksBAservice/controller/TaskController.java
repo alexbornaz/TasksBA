@@ -6,6 +6,9 @@ import com.tasksBA.tasksBAservice.service.task.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
@@ -19,6 +22,12 @@ public class TaskController {
     public ResponseEntity<Task> getTask(@PathVariable Long taskId) {
         Task task = taskService.getTask(taskId).get();
         return ResponseEntity.ok().body(task);
+    }
+
+    @GetMapping("/all")
+    ResponseEntity<List<Task>> getAllTasks() {
+        List<Task> tasks = taskService.getAll();
+        return ResponseEntity.ok().body(tasks);
     }
 
     @PostMapping("/add")

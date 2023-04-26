@@ -11,9 +11,7 @@ import {Observable} from "rxjs";
 export class UserService {
   apiUrl: string = "http://localhost:8080/api/user"
   decodedToken ?: any;
-  httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'})
-  };
+
 
   constructor(private authService: AuthenticationService, private http: HttpClient) {
     const token = this.authService.getToken();
@@ -22,12 +20,7 @@ export class UserService {
     }
   }
 
-  private addAuthorizationHeader(): void {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.httpOptions.headers = this.httpOptions.headers.set('Authorization', `Bearer ${token}`);
-    }
-  }
+
 
   getUsername(): string | null {
     if (this.decodedToken) {
@@ -37,7 +30,8 @@ export class UserService {
   }
 
   getTasks(username: string | undefined): Observable<Task[]> {
-    this.addAuthorizationHeader();
-    return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, this.httpOptions)
+    let httpOptions = this.authService.httpOptions;
+    return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, httpOptions)
   }
+
 }

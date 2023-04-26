@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -21,6 +21,11 @@ public class TaskServiceImpl implements TaskService{
         this.userService = userService;
     }
 
+
+    @Override
+    public List<Task> getAll() {
+        return taskRepository.findAll();
+    }
 
     @Override
     public Optional<Task> getTask(Long id) {
