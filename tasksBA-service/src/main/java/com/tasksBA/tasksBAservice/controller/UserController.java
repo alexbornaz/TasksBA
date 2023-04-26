@@ -16,7 +16,7 @@ import java.util.Set;
 public class UserController {
     private final UserService userService;
 
-    public UserController(TaskService taskService, UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/list-all")
-    public ResponseEntity<List<UserDTO>> getListOfUsernames(){
+    public ResponseEntity<List<UserDTO>> getListOfUsernames() {
         return ResponseEntity.ok().body(userService.getUsernames());
     }
 }
