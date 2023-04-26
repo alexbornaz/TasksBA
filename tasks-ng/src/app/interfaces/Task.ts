@@ -5,5 +5,5 @@ export interface Task {
   subject: string;
   dueDate: Date;
   status:Status;
-  assignedTo:string;
+  assignedTo:any;
 }

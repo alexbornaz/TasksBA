@@ -10,7 +10,7 @@
     <tbody>
     <tr *ngFor="let task of tasks$ | async">
       <td><a [routerLink]="['/tasks',task.id]">{{ task.subject }}</a></td>
-      <td>{{ task.dueDate }}</td>
+      <td>{{ task.dueDate | date:'MM/dd/yyyy' }}</td>
       <td>{{ task.status }}</td>
     </tr>
     </tbody>

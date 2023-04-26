@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Task} from "../../interfaces/Task";
-import {Observable, of} from "rxjs";
+import {map, Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-my-tasks',
@@ -28,6 +28,8 @@ export class MyTasksComponent {
   }
 
   getTasks(): Observable<Task[]> {
-    return this.userService.getTasks(this.username);
+    return this.userService.getTasks(this.username).pipe(
+      map(tasks => tasks.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()))
+    );
   }
 }

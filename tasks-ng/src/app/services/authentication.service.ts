@@ -8,8 +8,9 @@ import {LoginReq} from "../interfaces/LoginReq";
   providedIn: 'root'
 })
 export class AuthenticationService {
+
   url = "http://localhost:8080/api/auth"
-  httpOptions = {
+  private _httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
@@ -33,9 +34,20 @@ export class AuthenticationService {
   }
 
   getToken(): string | null {
-    if (this.isLoggedIn()){
+    if (this.isLoggedIn()) {
       return localStorage.getItem("token");
     }
     return null;
+  }
+
+  private addAuthorizationHeader(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this._httpOptions.headers = this._httpOptions.headers.set('Authorization', `Bearer ${token}`);
+    }
+  }
+  get httpOptions(): { headers: HttpHeaders } {
+    this.addAuthorizationHeader();
+    return this._httpOptions;
   }
 }
