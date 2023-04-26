@@ -1,7 +1,7 @@
 package com.tasksBA.tasksBAservice.controller;
 
-import com.tasksBA.tasksBAservice.dto.MessageResp;
-import com.tasksBA.tasksBAservice.dto.TaskDTO;
+import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
+import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
 import org.springframework.http.ResponseEntity;

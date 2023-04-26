@@ -1,5 +1,6 @@
 package com.tasksBA.tasksBAservice.service.user;
 
+import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
 import com.tasksBA.tasksBAservice.model.User;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface UserService {
     void deleteUser(User user);
 
 
+    List<UserDTO> getUsernames();
 }

@@ -1,6 +1,6 @@
 package com.tasksBA.tasksBAservice.service.task;
 
-import com.tasksBA.tasksBAservice.dto.TaskDTO;
+import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.TaskRepository;

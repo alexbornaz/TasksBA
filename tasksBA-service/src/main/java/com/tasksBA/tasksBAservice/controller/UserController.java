@@ -1,5 +1,6 @@
 package com.tasksBA.tasksBAservice.controller;
 
+import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
@@ -7,6 +8,7 @@ import com.tasksBA.tasksBAservice.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -19,22 +21,25 @@ public class UserController {
     }
 
     @GetMapping("/tasks/{username}")
-    public ResponseEntity<Set<Task>> getAssignedTasks(@PathVariable String username){
+    public ResponseEntity<Set<Task>> getAssignedTasks(@PathVariable String username) {
         Set<Task> tasks = userService.getUserByUsername(username).get().getAssignedTasks();
         return ResponseEntity.ok().body(tasks);
     }
 
     @DeleteMapping("/delete/{usernane}")
-    public ResponseEntity<String> deleteUser(@PathVariable String usernane){
+    public ResponseEntity<String> deleteUser(@PathVariable String usernane) {
         User user = userService.getUserByUsername(usernane).get();
-        try{
+        try {
             userService.deleteUser(user);
             return ResponseEntity.ok().body("User deleted");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok().body("Couldn't delete user");
         }
     }
 
-
+    @GetMapping("/list-all")
+    public ResponseEntity<List<UserDTO>> getListOfUsernames(){
+        return ResponseEntity.ok().body(userService.getUsernames());
+    }
 }

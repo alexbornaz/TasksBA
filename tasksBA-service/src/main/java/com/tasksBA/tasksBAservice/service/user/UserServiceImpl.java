@@ -1,13 +1,16 @@
 package com.tasksBA.tasksBAservice.service.user;
 
+import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -42,5 +45,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    @Override
+    public List<UserDTO> getUsernames() {
+        List<User> users = getUsers();
+        return users.stream().map(user -> new UserDTO(user.getUsername())).collect(Collectors.toList());
     }
 }

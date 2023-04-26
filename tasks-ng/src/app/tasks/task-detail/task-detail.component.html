@@ -38,7 +38,10 @@
 
     <div class="mb-3">
       <label for="assignedTo" class="form-label">Assigned To</label>
-      <input type="text" class="form-control" id="assignedTo" formControlName="assignedTo">
+      <select class="form-select" id="assignedTo" formControlName="assignedTo">
+        <option *ngFor="let user of (users | async)" [value]="user.username">{{user.username}}</option>
+      </select>
+
     </div>
 
     <button type="button" class="btn btn-primary"

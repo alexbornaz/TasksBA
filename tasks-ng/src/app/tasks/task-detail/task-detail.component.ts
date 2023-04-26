@@ -2,9 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {Task} from "../../interfaces/Task";
 import {ActivatedRoute} from "@angular/router";
 import {TaskService} from "../../services/task.service";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {Status} from "../../Status";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "../../services/user.service";
+import {UserDTO} from "../../interfaces/UserDTO";
 
 @Component({
   selector: 'app-task-detail',
@@ -17,8 +19,9 @@ export class TaskDetailComponent implements OnInit {
   taskForm: FormGroup;
   statuses = Object.values(Status)
   originalTask?: Task
+  users?:Observable<UserDTO[]>;
 
-  constructor(private route: ActivatedRoute, private taskService: TaskService) {
+  constructor(private route: ActivatedRoute, private taskService: TaskService, private userService: UserService) {
     this.taskForm = new FormGroup({
       subject: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       dueDate: new FormControl('', Validators.required),
@@ -31,6 +34,7 @@ export class TaskDetailComponent implements OnInit {
   ngOnInit(): void {
 
     this.route.params.subscribe(params => {
+      this.users = this.getUsernames();
       const taskId = params['id']
       this.task = this.getTask(taskId)
       this.task.subscribe(task => {
@@ -47,6 +51,10 @@ export class TaskDetailComponent implements OnInit {
 
   private getTask(id: number): Observable<Task> {
     return this.taskService.getTask(id);
+  }
+
+  private getUsernames(): Observable<UserDTO[]> {
+    return this.userService.getUsernames()
   }
 
   onEdit(): void {

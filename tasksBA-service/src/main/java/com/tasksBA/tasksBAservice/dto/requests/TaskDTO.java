@@ -1,4 +1,4 @@
-package com.tasksBA.tasksBAservice.dto;
+package com.tasksBA.tasksBAservice.dto.requests;
 
 import com.tasksBA.tasksBAservice.model.Status;
 import lombok.AllArgsConstructor;

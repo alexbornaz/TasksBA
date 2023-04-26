@@ -1,8 +1,8 @@
 package com.tasksBA.tasksBAservice.controller;
 
-import com.tasksBA.tasksBAservice.dto.LoginReq;
-import com.tasksBA.tasksBAservice.dto.MessageResp;
-import com.tasksBA.tasksBAservice.dto.SignUpReq;
+import com.tasksBA.tasksBAservice.dto.requests.LoginReq;
+import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
+import com.tasksBA.tasksBAservice.dto.requests.SignUpReq;
 import com.tasksBA.tasksBAservice.exceptions.auth.AuthenticationException;
 import com.tasksBA.tasksBAservice.service.auth.UserAuthService;
 import org.springframework.http.HttpHeaders;

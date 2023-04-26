@@ -4,6 +4,7 @@ import jwtDecode from "jwt-decode";
 import {Task} from "../interfaces/Task";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {UserDTO} from "../interfaces/UserDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class UserService {
   getTasks(username: string | undefined): Observable<Task[]> {
     let httpOptions = this.authService.httpOptions;
     return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, httpOptions)
+  }
+
+  getUsernames():Observable<UserDTO[]>{
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/list-all`,this.authService.httpOptions)
   }
 
 }

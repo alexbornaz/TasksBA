@@ -1,4 +1,4 @@
-package com.tasksBA.tasksBAservice.dto;
+package com.tasksBA.tasksBAservice.dto.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
