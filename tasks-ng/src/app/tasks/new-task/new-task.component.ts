@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Status} from "../../Status";
@@ -7,7 +7,6 @@ import {UserDTO} from "../../interfaces/UserDTO";
 import {UserService} from "../../services/user.service";
 import {TaskService} from "../../services/task.service";
 import {Task} from "../../interfaces/Task";
-import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-new-task',
