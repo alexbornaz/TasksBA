@@ -1,5 +1,6 @@
 package com.tasksBA.tasksBAservice.controller;
 
+import com.tasksBA.tasksBAservice.dto.SearchReq;
 import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;
@@ -32,13 +33,13 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<MessageResp> addTask(@RequestBody TaskDTO taskDTO) {
         try {
             taskService.createTask(taskDTO);
-            return ResponseEntity.ok().body("Task added with success");
+            return ResponseEntity.ok().body(new MessageResp("Task added with success"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok().body("Couldn't add task");
+            return ResponseEntity.ok().body(new MessageResp("Couldn't add task"));
         }
     }
     @PutMapping("/edit")
@@ -50,5 +51,10 @@ public class TaskController {
             e.printStackTrace();
             return ResponseEntity.ok().body(new MessageResp("Task edit failed"));
         }
+    }
+    @PostMapping("/search")
+    public ResponseEntity<?> getSearchedTasks(@RequestBody SearchReq searchReq){
+        List<Task> tasks = taskService.searchTasks(searchReq);
+        return ResponseEntity.ok().body(tasks);
     }
 }

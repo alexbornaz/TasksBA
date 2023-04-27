@@ -3,6 +3,7 @@ import {AuthenticationService} from "./authentication.service";
 import {Observable} from "rxjs";
 import {Task} from "../interfaces/Task";
 import {HttpClient} from "@angular/common/http";
+import {SearchReq} from "../interfaces/SearchReq";
 
 
 @Injectable({
@@ -25,5 +26,13 @@ export class TaskService {
 
   editTask(task: Task): Observable<any> {
     return this.http.put(`${this.apiUrl}/edit`, task, this.authService.httpOptions)
+  }
+
+  getTasksBySearchTerms(searchTerms: SearchReq): Observable<Task[]> {
+    return this.http.post<Task[]>(`${this.apiUrl}/search`, searchTerms, this.authService.httpOptions)
+  }
+
+  createTask(task: Task): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add`,task,this.authService.httpOptions)
   }
 }

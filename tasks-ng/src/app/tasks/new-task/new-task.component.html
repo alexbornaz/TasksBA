@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h4 class="modal-title">New Task</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()">
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="newTaskForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="subject">Subject</label>
+      <input type="text" class="form-control" id="subject" formControlName="subject">
+      <div
+        *ngIf="newTaskForm.get('subject')?.invalid && (newTaskForm.get('subject')?.dirty || newTaskForm.get('subject')?.touched)"
+        class="alert alert-danger mt-2">
+        <div *ngIf="newTaskForm.get('subject')?.errors?.['required']">Subject is required.</div>
+        <div *ngIf="newTaskForm.get('subject')?.errors?.['maxlength']">Subject must be less than or equal to 100
+          characters.
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dueDate">Due Date</label>
+      <input type="date" class="form-control" id="dueDate" formControlName="dueDate">
+      <div
+        *ngIf="newTaskForm.get('dueDate')?.invalid && (newTaskForm.get('dueDate')?.dirty || newTaskForm.get('dueDate')?.touched)"
+        class="alert alert-danger mt-2">
+        <div *ngIf="newTaskForm.get('dueDate')?.errors?.['required']">Due date is required.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select class="form-control" id="status" formControlName="status">
+        <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="assignedTo">Assigned To</label>
+      <select class="form-control" id="assignedTo" formControlName="assignedTo">
+        <option *ngFor="let user of (users | async)" [value]="user.username">{{user.username}}</option>
+      </select>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn my-3" [ngClass]="newTaskForm.valid ? 'btn-success': 'btn-danger'"
+              [disabled]="!newTaskForm.valid">Create Task
+      </button>
+    </div>
+  </form>
+</div>

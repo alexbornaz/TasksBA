@@ -1,5 +1,6 @@
 package com.tasksBA.tasksBAservice.service.task;
 
+import com.tasksBA.tasksBAservice.dto.SearchReq;
 import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
@@ -16,4 +17,6 @@ public interface TaskService {
     void deleteTask(Task task);
 
     void editTask(TaskDTO taskDTO);
+
+    List<Task> searchTasks(SearchReq searchReq);
 }
