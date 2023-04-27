@@ -10,7 +10,7 @@ import {UserDTO} from "../interfaces/UserDTO";
   providedIn: 'root'
 })
 export class UserService {
-  apiUrl: string = "http://localhost:8080/api/user"
+  apiUrl: string = "http://localhost:8080/api/users"
   decodedToken ?: any;
 
 
@@ -36,7 +36,7 @@ export class UserService {
   }
 
   getUsernames():Observable<UserDTO[]>{
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/list-all`,this.authService.httpOptions)
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/usernames`,this.authService.httpOptions)
   }
 
 }

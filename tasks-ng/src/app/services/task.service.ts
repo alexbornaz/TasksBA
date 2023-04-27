@@ -17,7 +17,7 @@ export class TaskService {
   }
 
   getAllTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}/all`, this.authService.httpOptions)
+    return this.http.get<Task[]>(`${this.apiUrl}`, this.authService.httpOptions)
   }
 
   getTask(taskId: number): Observable<Task> {

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
     private final TaskService taskService;
@@ -28,7 +28,7 @@ public class UserController {
         return ResponseEntity.ok().body(tasks);
     }
 
-    @DeleteMapping("/delete/{usernane}")
+    @DeleteMapping("/{usernane}")
     public ResponseEntity<String> deleteUser(@PathVariable String usernane) {
         User user = userService.getUserByUsername(usernane).get();
         try {
@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/list-all")
+    @GetMapping("/usernames")
     public ResponseEntity<List<UserDTO>> getListOfUsernames() {
         return ResponseEntity.ok().body(userService.getUsernames());
     }
