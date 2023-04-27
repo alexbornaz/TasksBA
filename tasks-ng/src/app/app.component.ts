@@ -1,6 +1,7 @@
-import {Component, DoCheck} from '@angular/core';
+import {Component, DoCheck, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthenticationService} from "./services/authentication.service";
+
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import {AuthenticationService} from "./services/authentication.service";
 export class AppComponent {
   title = 'tasks-ng';
   isMainWindowOn = false;
+
 
   constructor(private router: Router, private authService: AuthenticationService) {
   }

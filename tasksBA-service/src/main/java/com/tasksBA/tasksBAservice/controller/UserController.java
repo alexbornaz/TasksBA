@@ -15,14 +15,16 @@ import java.util.Set;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final TaskService taskService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, TaskService taskService) {
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/tasks/{username}")
-    public ResponseEntity<Set<Task>> getAssignedTasks(@PathVariable String username) {
-        Set<Task> tasks = userService.getUserByUsername(username).get().getAssignedTasks();
+    public ResponseEntity<List<Task>> getAssignedTasks(@PathVariable String username) {
+        List<Task> tasks = taskService.getAssignedTasks(username);
         return ResponseEntity.ok().body(tasks);
     }
 

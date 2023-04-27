@@ -18,8 +18,6 @@ export class AllTasksComponent implements OnInit{
   }
 
   getAllTasks(): Observable<Task[]> {
-    return this.taskService.getAllTasks().pipe(
-      map(tasks => tasks.sort((a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()))
-    );
+    return this.taskService.getAllTasks()
   }
 }

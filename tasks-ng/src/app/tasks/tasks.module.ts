@@ -5,6 +5,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { AllTasksComponent } from './all-tasks/all-tasks.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { NewTaskComponent } from './new-task/new-task.component';
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
     MyTasksComponent,
     TaskDetailComponent,
     AllTasksComponent,
+    NewTaskComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ const routes: Routes = [
   exports: [
     MyTasksComponent,
     TaskDetailComponent,
-    AllTasksComponent
+    AllTasksComponent,
+    NewTaskComponent
   ],
 })
 export class TasksModule {

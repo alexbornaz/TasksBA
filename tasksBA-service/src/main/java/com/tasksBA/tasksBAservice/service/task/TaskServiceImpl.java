@@ -5,6 +5,7 @@ import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.TaskRepository;
 import com.tasksBA.tasksBAservice.service.user.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +25,18 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public List<Task> getAll() {
-        return taskRepository.findAll();
+        return taskRepository.findAll(Sort.by(Sort.Direction.DESC,"dueDate"));
     }
 
     @Override
     public Optional<Task> getTask(Long id) {
         return taskRepository.findById(id);
+    }
+
+    @Override
+    public List<Task> getAssignedTasks(String username) {
+        User user = userService.getUserByUsername(username).get();
+        return taskRepository.findAllByAssignedToOrderByDueDateDesc(user);
     }
 
     @Override
@@ -63,4 +70,6 @@ public class TaskServiceImpl implements TaskService{
         task.setAssignedTo(user);
         taskRepository.save(task);
     }
+
+
 }
