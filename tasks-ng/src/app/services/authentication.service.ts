@@ -3,18 +3,21 @@ import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RegisterReq} from "../interfaces/RegisterReq";
 import {LoginReq} from "../interfaces/LoginReq";
+import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
+
+
   url = "http://localhost:8080/api/auth"
   private _httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private jwtHelper:JwtHelperService) {
   }
 
   login(loginReq: LoginReq): Observable<HttpResponse<any>> {
@@ -22,7 +25,8 @@ export class AuthenticationService {
   }
 
   isLoggedIn(): boolean {
-    return localStorage.getItem("token") != null;
+    console.log(!this.jwtHelper.isTokenExpired(localStorage.getItem("token")))
+    return !this.jwtHelper.isTokenExpired(localStorage.getItem("token"))
   }
 
   logout(): void {

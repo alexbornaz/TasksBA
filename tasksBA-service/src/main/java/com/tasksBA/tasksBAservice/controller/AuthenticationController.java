@@ -3,6 +3,7 @@ package com.tasksBA.tasksBAservice.controller;
 import com.tasksBA.tasksBAservice.dto.requests.LoginReq;
 import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.requests.SignUpReq;
+import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.exceptions.auth.AuthenticationException;
 import com.tasksBA.tasksBAservice.service.auth.UserAuthService;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +39,8 @@ public class AuthenticationController {
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
         } catch (AuthenticationException e) {
             return ResponseEntity.ok().body(new MessageResp(e.getCause().getMessage()));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
         }
     }
 }

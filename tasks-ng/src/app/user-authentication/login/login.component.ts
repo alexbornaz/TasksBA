@@ -35,6 +35,7 @@ export class LoginComponent {
           if (!token) {
             this.serverMessage = response.body.message;
             this.showServerMessage = true;
+            this.loginForm.reset()
           } else {
             localStorage.setItem("token", token);
             this.router.navigate(['']);
