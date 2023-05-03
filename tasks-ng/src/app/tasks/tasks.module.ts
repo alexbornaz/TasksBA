@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, Location} from '@angular/common';
 import {MyTasksComponent} from './my-tasks/my-tasks.component';
 import {RouterModule, Routes} from "@angular/router";
 import { TaskDetailComponent } from './task-detail/task-detail.component';
@@ -28,14 +28,14 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     MyTasksComponent,
     TaskDetailComponent,
     AllTasksComponent,
     NewTaskComponent,
-    SearchTaskComponent
+    SearchTaskComponent,
   ],
 })
 export class TasksModule {

@@ -36,20 +36,20 @@ public class TaskController {
     public ResponseEntity<MessageResp> addTask(@RequestBody TaskDTO taskDTO) {
         try {
             taskService.createTask(taskDTO);
-            return ResponseEntity.ok().body(new MessageResp("Task added with success"));
+            return ResponseEntity.ok().body(new MessageResp(true,"Task added with success"));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.ok().body(new MessageResp("Couldn't add task"));
+            return ResponseEntity.ok().body(new MessageResp(false,"Couldn't add task"));
         }
     }
     @PutMapping("/edit")
     public ResponseEntity<?> editTask(@RequestBody TaskDTO taskDTO){
         try{
             taskService.editTask(taskDTO);
-            return ResponseEntity.ok().body(new MessageResp("Task edited with success"));
+            return ResponseEntity.ok().body(new MessageResp(true,"Task edited with success"));
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.ok().body(new MessageResp("Task edit failed"));
+            return ResponseEntity.ok().body(new MessageResp(false,"Task edit failed"));
         }
     }
     @PostMapping("/search")

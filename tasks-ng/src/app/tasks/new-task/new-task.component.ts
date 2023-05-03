@@ -7,6 +7,7 @@ import {UserDTO} from "../../interfaces/UserDTO";
 import {UserService} from "../../services/user.service";
 import {TaskService} from "../../services/task.service";
 import {Task} from "../../interfaces/Task";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-new-task',
@@ -20,7 +21,8 @@ export class NewTaskComponent implements OnInit {
   serverMessage: string
   showServerMessage: boolean
 
-  constructor(public activeModal: NgbActiveModal, private userService: UserService, private taskService: TaskService) {
+  constructor(public activeModal: NgbActiveModal, private userService: UserService, private taskService: TaskService,
+              private toastr: ToastrService) {
     this.serverMessage = "";
     this.showServerMessage = false;
     this.newTaskForm = new FormGroup({
@@ -45,12 +47,16 @@ export class NewTaskComponent implements OnInit {
 
     }
     this.taskService.createTask(newTask).subscribe(response => {
-        this.serverMessage = response.message
-        this.showServerMessage = true;
-        this.newTaskForm.reset()
-        this.activeModal.close();
-        window.location.reload()
+      this.serverMessage = response.message
+      this.newTaskForm.reset()
+      this.activeModal.close();
+      if (response.success){
+        this.taskService.triggerRefresh();
+        this.toastr.success(this.serverMessage,'success',{progressBar:true})
+      }else {
+        this.toastr.error(this.serverMessage,"error",{progressBar:true,closeButton:true})
       }
-    )
+
+    })
   }
 }

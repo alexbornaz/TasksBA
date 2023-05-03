@@ -48,13 +48,15 @@
             *ngIf="!editableMode"
             (click)="onEdit()">Edit
     </button>
-    <button type="submit" class="btn btn-primary"
-            *ngIf="editableMode"
-            (click)="onSave()">Save
-    </button>
-    <button type="button" class="btn btn-secondary"
-            *ngIf="editableMode"
-            (click)="onCancel()">Discard Changes
-    </button>
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-danger me-auto"
+              *ngIf="editableMode"
+              (click)="onCancel()">Discard Changes
+      </button>
+      <button type="submit" class="btn btn-success"
+              *ngIf="editableMode"
+              (click)="onSave()">Save
+      </button>
+    </div>
   </form>
 </div>

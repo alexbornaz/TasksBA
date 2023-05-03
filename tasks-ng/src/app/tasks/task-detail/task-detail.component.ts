@@ -7,6 +7,7 @@ import {Status} from "../../Status";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../services/user.service";
 import {UserDTO} from "../../interfaces/UserDTO";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-task-detail',
@@ -21,7 +22,8 @@ export class TaskDetailComponent implements OnInit {
   originalTask?: Task
   users?:Observable<UserDTO[]>;
 
-  constructor(private route: ActivatedRoute, private taskService: TaskService, private userService: UserService) {
+  constructor(private route: ActivatedRoute, private taskService: TaskService, private userService: UserService,
+              private toastr:ToastrService) {
     this.taskForm = new FormGroup({
       subject: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       dueDate: new FormControl('', Validators.required),
@@ -80,12 +82,14 @@ export class TaskDetailComponent implements OnInit {
       assignedTo: this.taskForm.get('assignedTo')?.value || ''
     };
     this.taskService.editTask(newTask).subscribe(response => {
-      console.log(response)
-      console.log('New Task:', newTask);
-
       this.originalTask = newTask;
       this.editableMode = false;
       this.taskForm.disable()
+      if (response.success){
+        this.toastr.success(response.message,"success",{progressBar:true,closeButton:true})
+      }else {
+        this.toastr.error(response.message,"error",{progressBar:true,closeButton:true})
+      }
     });
 
   }

@@ -15,8 +15,8 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let task of tasks | async">
-            <td><a [routerLink]="['/tasks',task.id]">{{ task.subject }}</a></td>
+          <tr class="table-row" *ngFor="let task of tasks | async" [routerLink]="['/tasks',task.id]">
+            <td>{{ task.subject }}</td>
             <td>{{ task.dueDate}}</td>
             <td>{{ task.status }}</td>
             <td>{{task.assignedTo.username}}</td>

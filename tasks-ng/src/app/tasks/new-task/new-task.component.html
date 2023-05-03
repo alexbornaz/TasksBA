@@ -28,13 +28,13 @@
     </div>
     <div class="form-group">
       <label for="status">Status</label>
-      <select class="form-control" id="status" formControlName="status">
+      <select class="form-control form-select" id="status" formControlName="status">
         <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
       </select>
     </div>
     <div class="form-group">
       <label for="assignedTo">Assigned To</label>
-      <select class="form-control" id="assignedTo" formControlName="assignedTo">
+      <select class="form-control form-select" id="assignedTo" formControlName="assignedTo">
         <option *ngFor="let user of (users | async)" [value]="user.username">{{user.username}}</option>
       </select>
     </div>

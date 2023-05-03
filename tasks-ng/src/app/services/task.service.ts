@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AuthenticationService} from "./authentication.service";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Task} from "../interfaces/Task";
 import {HttpClient} from "@angular/common/http";
 import {SearchReq} from "../interfaces/SearchReq";
@@ -11,6 +11,13 @@ import {SearchReq} from "../interfaces/SearchReq";
 })
 export class TaskService {
   apiUrl: string;
+
+  private refreshSubject = new Subject<void>();
+  refreshComponent$ = this.refreshSubject.asObservable()
+
+  triggerRefresh(){
+    this.refreshSubject.next();
+  }
 
   constructor(private authService: AuthenticationService, private http: HttpClient) {
     this.apiUrl = "http://localhost:8080/api/tasks"

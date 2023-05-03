@@ -1,3 +1,6 @@
 .invalid-feedback{
   display: block;
 }
+.table-row:hover{
+  background-color: grey;
+}
