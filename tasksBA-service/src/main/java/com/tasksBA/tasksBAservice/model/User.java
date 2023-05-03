@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class User implements UserDetails {
     public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.password =password;
         this.role = role;
     }
 

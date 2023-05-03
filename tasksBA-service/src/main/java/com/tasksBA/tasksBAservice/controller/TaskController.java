@@ -1,6 +1,6 @@
 package com.tasksBA.tasksBAservice.controller;
 
-import com.tasksBA.tasksBAservice.dto.SearchReq;
+import com.tasksBA.tasksBAservice.dto.requests.SearchReq;
 import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.model.Task;

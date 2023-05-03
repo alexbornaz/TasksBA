@@ -1,24 +1,25 @@
 package com.tasksBA.tasksBAservice.service.task;
 
-import com.tasksBA.tasksBAservice.dto.SearchReq;
+import com.tasksBA.tasksBAservice.dto.requests.SearchReq;
 import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
+import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Status;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.TaskRepository;
 import com.tasksBA.tasksBAservice.service.user.UserService;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
+@Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
@@ -40,9 +41,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAssignedTasks(String username) {
-        User user = userService.getUserByUsername(username).get();
-        return taskRepository.findAllByAssignedToOrderByDueDateDesc(user);
+    public List<Task> getAssignedTasks(String username) throws UserNotFoundException {
+        User assignedToUser = userService.getUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username %s not found".formatted(username)));
+        return taskRepository.findAllByAssignedToOrderByDueDateDesc(assignedToUser);
     }
 
     @Override
@@ -81,28 +83,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> searchTasks(SearchReq searchReq) {
         String username = searchReq.getAssignedTo();
-        User user;
-        if (username != null) {
-            user = userService.getUserByUsername(username).get();
-        } else {
-            user = null;
-        }
         String subject = searchReq.getSubject();
         Status status = searchReq.getStatus();
         LocalDate dueDate = searchReq.getDueDate();
-        Task task = new Task();
-        task.setAssignedTo(user);
-        task.setSubject(subject);
-        task.setStatus(status);
-
-        Example<Task> example = Example.of(task, ExampleMatcher.matchingAll()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-        );
-        if (dueDate != null) {
-            return taskRepository.findAll(example).stream().filter(task1 -> task1.getDueDate().compareTo(dueDate) > 0)
-                    .collect(Collectors.toList());
-        }
-        return taskRepository.findAll(example);
+        return taskRepository.findTasksBySearchReq(username, subject, status, dueDate);
     }
 }

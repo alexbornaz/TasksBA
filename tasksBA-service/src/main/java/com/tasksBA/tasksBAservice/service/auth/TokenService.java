@@ -22,10 +22,10 @@ import java.util.UUID;
 @Slf4j
 public class TokenService {
     @Value("${jwt.secret}")
-    private String jwtSecret;
+    public String jwtSecret;
 
     @Value("${jwt.expiration.minutes}")
-    private Long expirationMinutes;
+    public Long expirationMinutes;
 
     public static final String TOKEN_TYPE = "JWT";
     public static final String TOKEN_ISSUER = "SERVER";

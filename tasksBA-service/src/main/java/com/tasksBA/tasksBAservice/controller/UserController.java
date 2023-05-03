@@ -1,6 +1,8 @@
 package com.tasksBA.tasksBAservice.controller;
 
+import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
+import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,9 +24,13 @@ public class UserController {
     }
 
     @GetMapping("/tasks/{username}")
-    public ResponseEntity<List<Task>> getAssignedTasks(@PathVariable String username) {
-        List<Task> tasks = taskService.getAssignedTasks(username);
-        return ResponseEntity.ok().body(tasks);
+    public ResponseEntity<?> getAssignedTasks(@PathVariable String username) throws UserNotFoundException {
+        try {
+            List<Task> tasks = taskService.getAssignedTasks(username);
+            return ResponseEntity.ok().body(tasks);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{usernane}")

@@ -2,6 +2,7 @@ package com.tasksBA.tasksBAservice.service.auth;
 
 import com.tasksBA.tasksBAservice.dto.requests.LoginReq;
 import com.tasksBA.tasksBAservice.dto.requests.SignUpReq;
+import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.exceptions.auth.AuthenticationException;
 import com.tasksBA.tasksBAservice.exceptions.auth.EmailAlreadyExistsException;
 import com.tasksBA.tasksBAservice.exceptions.auth.UsernameAlreadyExistsException;
@@ -15,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,11 +35,12 @@ public class UserAuthService {
     }
 
     public User mapSignUpRequestToUser(SignUpReq signUpRequest) {
+        String encodedPass = passwordEncoder.encode(signUpRequest.getPassword());
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setPassword(encodedPass);
         return user;
     }
 
@@ -60,7 +64,7 @@ public class UserAuthService {
             log.error("{}, username already exists, registration failed", signUpRequest.getUsername());
             throw new AuthenticationException(new UsernameAlreadyExistsException("Username already exists"));
         }
-        if (userService.hasUserWithEmail(signUpRequest.getUsername())) {
+        if (userService.hasUserWithEmail(signUpRequest.getEmail())) {
             log.warn("{}, email already exists, registration failed", signUpRequest.getEmail());
             throw new AuthenticationException(new EmailAlreadyExistsException("Email already exists"));
         }
@@ -68,17 +72,22 @@ public class UserAuthService {
         return authenticate(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 
-    public String login(LoginReq loginReq) throws AuthenticationException {
+    public String login(LoginReq loginReq) throws AuthenticationException, UserNotFoundException {
         if (areValidCredentials(loginReq)) {
             return authenticate(loginReq.getUsername(), loginReq.getPassword());
         }
         throw new AuthenticationException(new UsernameOrPasswordExistsException("Username or password wrong!"));
     }
 
-    private boolean areValidCredentials(LoginReq loginReq) {
+    public boolean areValidCredentials(LoginReq loginReq) throws UserNotFoundException {
         if (userService.hasUserWithUsername(loginReq.getUsername())) {
-            String encodedPassword = userService.getUserByUsername(loginReq.getUsername()).get().getPassword();
-            return passwordEncoder.matches(loginReq.getPassword(), encodedPassword);
+            Optional<User> user = userService.getUserByUsername(loginReq.getUsername());
+            if (user.isPresent()) {
+                String encodedPassword = user.get().getPassword();
+                return passwordEncoder.matches(loginReq.getPassword(), encodedPassword);
+            }else {
+                throw new UserNotFoundException("User does not exist");
+            }
         }
         log.warn("Login attempt from {} resulted unsuccessful", loginReq.getUsername());
         return false;
