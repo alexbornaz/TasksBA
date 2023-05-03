@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Task} from "../../interfaces/Task";
 import {ActivatedRoute} from "@angular/router";
 import {TaskService} from "../../services/task.service";
-import {Observable, of} from "rxjs";
+import {Observable} from "rxjs";
 import {Status} from "../../Status";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../services/user.service";
@@ -20,10 +20,10 @@ export class TaskDetailComponent implements OnInit {
   taskForm: FormGroup;
   statuses = Object.values(Status)
   originalTask?: Task
-  users?:Observable<UserDTO[]>;
+  users?: Observable<UserDTO[]>;
 
   constructor(private route: ActivatedRoute, private taskService: TaskService, private userService: UserService,
-              private toastr:ToastrService) {
+              private toastr: ToastrService) {
     this.taskForm = new FormGroup({
       subject: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       dueDate: new FormControl('', Validators.required),
@@ -85,10 +85,10 @@ export class TaskDetailComponent implements OnInit {
       this.originalTask = newTask;
       this.editableMode = false;
       this.taskForm.disable()
-      if (response.success){
-        this.toastr.success(response.message,"success",{progressBar:true,closeButton:true})
-      }else {
-        this.toastr.error(response.message,"error",{progressBar:true,closeButton:true})
+      if (response.success) {
+        this.toastr.success(response.message, "success", {progressBar: true, closeButton: true})
+      } else {
+        this.toastr.error(response.message, "error", {progressBar: true, closeButton: true})
       }
     });
 

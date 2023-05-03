@@ -4,7 +4,6 @@ import {Observable, of, Subscription} from "rxjs";
 import {Task} from 'src/app/interfaces/Task';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {SearchReq} from "../../interfaces/SearchReq";
-import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-all-tasks',
@@ -14,9 +13,9 @@ import {ToastrService} from "ngx-toastr";
 export class AllTasksComponent implements OnInit {
   tasks: Observable<Task[]> = of([])
   searchForm: FormGroup;
-  private refreshSub?:Subscription;
+  private refreshSub?: Subscription;
 
-  constructor(private taskService: TaskService, private formBuilder: FormBuilder,private toastr:ToastrService) {
+  constructor(private taskService: TaskService, private formBuilder: FormBuilder) {
     this.searchForm = this.formBuilder.group({
       assignedTo: '',
       dueDate: '',
@@ -27,7 +26,7 @@ export class AllTasksComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("executed")
-    this.refreshSub = this.taskService.refreshComponent$.subscribe(()=>{
+    this.refreshSub = this.taskService.refreshComponent$.subscribe(() => {
       this.tasks = this.getAllTasks();
     })
     this.tasks = this.getAllTasks();
