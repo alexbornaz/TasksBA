@@ -10,6 +10,7 @@ import com.tasksBA.tasksBAservice.exceptions.auth.UsernameOrPasswordExistsExcept
 import com.tasksBA.tasksBAservice.model.Role;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.service.user.UserService;
+import com.tasksBA.tasksBAservice.validator.ObjectValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +27,17 @@ public class UserAuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final ObjectValidator<LoginReq> loginValidator;
 
-    public UserAuthService(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService) {
+    private final ObjectValidator<SignUpReq> signUpValidator;
+
+    public UserAuthService(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService, ObjectValidator<LoginReq> loginValidator, ObjectValidator<SignUpReq> signUpValidator) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
+        this.loginValidator = loginValidator;
+        this.signUpValidator = signUpValidator;
     }
 
     public User mapSignUpRequestToUser(SignUpReq signUpRequest) {
@@ -54,12 +60,14 @@ public class UserAuthService {
         try {
             userService.saveUser(newUser);
         } catch (Exception e) {
-            log.info("Could not save user with username {}", signUpReq.getUsername());
+            log.error("Could not save user with username {}", signUpReq.getUsername(), e);
+            throw new RuntimeException("Could not save the user in db");
         }
     }
 
 
     public String registerUser(SignUpReq signUpRequest) throws AuthenticationException {
+        signUpValidator.validate(signUpRequest);
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
             log.error("{}, username already exists, registration failed", signUpRequest.getUsername());
             throw new AuthenticationException(new UsernameAlreadyExistsException("Username already exists"));
@@ -73,6 +81,7 @@ public class UserAuthService {
     }
 
     public String login(LoginReq loginReq) throws AuthenticationException, UserNotFoundException {
+        loginValidator.validate(loginReq);
         if (areValidCredentials(loginReq)) {
             return authenticate(loginReq.getUsername(), loginReq.getPassword());
         }
@@ -85,11 +94,12 @@ public class UserAuthService {
             if (user.isPresent()) {
                 String encodedPassword = user.get().getPassword();
                 return passwordEncoder.matches(loginReq.getPassword(), encodedPassword);
-            }else {
+            } else {
                 throw new UserNotFoundException("User does not exist");
             }
+        } else {
+            log.warn("Login attempt from {} resulted unsuccessful", loginReq.getUsername());
+            throw new UserNotFoundException("User does not exist");
         }
-        log.warn("Login attempt from {} resulted unsuccessful", loginReq.getUsername());
-        return false;
     }
 }

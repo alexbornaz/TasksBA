@@ -1,7 +1,6 @@
 package com.tasksBA.tasksBAservice.controller;
 
 import com.tasksBA.tasksBAservice.dto.requests.LoginReq;
-import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.requests.SignUpReq;
 import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.exceptions.auth.AuthenticationException;
@@ -23,24 +22,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> signUp(@RequestBody SignUpReq signUpReq) {
-        try {
-            String token = userAuthService.registerUser(signUpReq);
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
-        } catch (AuthenticationException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getCause().getMessage()));
-        }
+    public ResponseEntity<?> signUp(@RequestBody SignUpReq signUpReq) throws AuthenticationException {
+        String token = userAuthService.registerUser(signUpReq);
+        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
-        try {
-            String token = userAuthService.login(loginReq);
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
-        } catch (AuthenticationException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getCause().getMessage()));
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
-        }
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws AuthenticationException, UserNotFoundException {
+        String token = userAuthService.login(loginReq);
+        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
     }
 }
