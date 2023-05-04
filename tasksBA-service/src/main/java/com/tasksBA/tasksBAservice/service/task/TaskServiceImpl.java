@@ -10,7 +10,6 @@ import com.tasksBA.tasksBAservice.repository.TaskRepository;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -43,17 +42,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getAssignedTasks(String username) throws UserNotFoundException {
         User assignedToUser = userService.getUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username %s not found".formatted(username)));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         return taskRepository.findAllByAssignedToOrderByDueDateDesc(assignedToUser);
     }
 
     @Override
-    public void createTask(TaskDTO taskDTO) {
-        User user = userService.getUserByUsername(taskDTO.getAssignedTo()).get();
+    public void createTask(TaskDTO taskDTO) throws UserNotFoundException {
+        User user = userService.getUserByUsername(taskDTO.getAssignedTo())
+                .orElseThrow(() -> new UserNotFoundException("User not found for username " + taskDTO.getAssignedTo()));
+//        User user = userService.getUserByUsername(taskDTO.getAssignedTo()).get();
         Task task = new Task(taskDTO.getSubject(), taskDTO.getDueDate(), user);
-        task.setSubject(taskDTO.getSubject());
-        task.setDueDate(taskDTO.getDueDate());
-        task.setAssignedTo(user);
         task.setStatus(taskDTO.getStatus());
         taskRepository.save(task);
         user.addTaskToAssigned(task);

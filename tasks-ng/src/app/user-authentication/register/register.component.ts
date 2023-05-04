@@ -31,14 +31,14 @@ export class RegisterComponent {
         password: this.registerForm.value.password ?? ""
       };
       this.authService.register(registerReq).subscribe(
-        response => {
-          const token: string = response.headers.get("Authorization") as string;
-          if (!token) {
-            this.serverMessage = response.body.message;
+        {
+          next: () => {
+            this.router.navigate([''])
+          },
+          error: (error) => {
+            this.serverMessage = error
             this.showMessage = true;
-          } else {
-            localStorage.setItem("token", token);
-            this.router.navigate(['']);
+            this.registerForm.reset()
           }
         }
       )

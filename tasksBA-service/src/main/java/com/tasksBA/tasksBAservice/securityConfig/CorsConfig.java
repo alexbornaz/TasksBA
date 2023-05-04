@@ -13,16 +13,16 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
-        @Bean
-        public CorsFilter corsFilter(@Value("${cors.allowed-origins}") List<String> allowedOrigins) {
-            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            CorsConfiguration config = new CorsConfiguration();
-            config.setAllowCredentials(true);
-            config.setAllowedOriginPatterns(allowedOrigins);
-            config.addAllowedMethod("*");
-            config.addAllowedHeader("*");
-            config.setExposedHeaders(Collections.singletonList("Authorization"));
-            source.registerCorsConfiguration("/**", config);
-            return new CorsFilter(source);
-        }
+    @Bean
+    public CorsFilter corsFilter(@Value("${cors.allowed-origins}") List<String> allowedOrigins) {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(allowedOrigins);
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setExposedHeaders(Collections.singletonList("Authorization"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
+}

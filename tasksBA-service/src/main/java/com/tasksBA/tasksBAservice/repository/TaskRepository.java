@@ -15,7 +15,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findAllByAssignedToOrderByDueDateDesc(User user);
 
-    @Query("SELECT t FROM Task t WHERE (:username IS NULL OR t.assignedTo.username = :username) AND" +
+    @Query("SELECT t FROM Task  t WHERE (:username IS NULL OR t.assignedTo.username = :username) AND" +
             " (:subject IS NULL OR LOWER(t.subject) LIKE LOWER(CONCAT('%', :subject, '%'))) AND" +
             " (:status IS NULL OR t.status = :status) AND" +
             " (cast( :dueDate as date ) IS NULL OR t.dueDate >cast( :dueDate as date )) ORDER BY t.dueDate DESC")

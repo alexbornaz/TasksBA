@@ -29,20 +29,19 @@ export class LoginComponent {
         username: this.loginForm.value.username ?? "",
         password: this.loginForm.value.password ?? ""
       };
-      this.authService.login(loginReq).subscribe(
-        response => {
-          const token: string = response.headers.get("Authorization") as string;
-          if (!token) {
-            this.serverMessage = response.body.message;
-            this.showServerMessage = true;
-            this.loginForm.reset()
-          } else {
-            localStorage.setItem("token", token);
-            this.router.navigate(['']);
+      this.authService.login(loginReq)
+        .subscribe(
+          {
+            next: () => {
+              this.router.navigate(['']);
+            },
+            error: (error) => {
+              this.serverMessage = error;
+              this.showServerMessage = true;
+              this.loginForm.reset();
+            }
           }
-        }
-      )
+        );
     }
   }
-
 }

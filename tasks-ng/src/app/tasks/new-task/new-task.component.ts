@@ -50,11 +50,11 @@ export class NewTaskComponent implements OnInit {
       this.serverMessage = response.message
       this.newTaskForm.reset()
       this.activeModal.close();
-      if (response.success){
+      if (response.success) {
         this.taskService.triggerRefresh();
-        this.toastr.success(this.serverMessage,'success',{progressBar:true})
-      }else {
-        this.toastr.error(this.serverMessage,"error",{progressBar:true,closeButton:true})
+        this.toastr.success(this.serverMessage, 'success', {progressBar: true})
+      } else {
+        this.toastr.error(this.serverMessage, "error", {progressBar: true, closeButton: true})
       }
 
     })

@@ -13,8 +13,11 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
+
     boolean existsByUsername(String username);
+
     boolean existsByEmail(String email);
+
     @Query("select new com.tasksBA.tasksBAservice.dto.responses.UserDTO(username) from User")
     List<UserDTO> getUsernames();
 

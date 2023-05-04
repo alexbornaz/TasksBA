@@ -12,13 +12,14 @@ import {TaskService} from "../../services/task.service";
 export class MyTasksComponent implements OnInit {
   private username?: string
   tasks$: Observable<Task[]> = of([])
-private refreshSub?:Subscription
-  constructor(private userService: UserService,private taskService:TaskService) {
+  private refreshSub?: Subscription
+
+  constructor(private userService: UserService, private taskService: TaskService) {
   }
 
   ngOnInit(): void {
-    this.refreshSub = this.taskService.refreshComponent$.subscribe(()=>{
-      this.tasks$=this.getTasks()
+    this.refreshSub = this.taskService.refreshComponent$.subscribe(() => {
+      this.tasks$ = this.getTasks()
     })
     this.retrieveUsername();
     this.tasks$ = this.getTasks();

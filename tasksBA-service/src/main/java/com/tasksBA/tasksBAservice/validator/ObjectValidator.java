@@ -1,6 +1,5 @@
 package com.tasksBA.tasksBAservice.validator;
 
-import com.tasksBA.tasksBAservice.dto.requests.LoginReq;
 import com.tasksBA.tasksBAservice.exceptions.ObjectNotValidException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -8,7 +7,6 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,10 +23,10 @@ public class ObjectValidator<T> {
     public void validate(T objectToValidate) {
         Set<ConstraintViolation<T>> violations = validator.validate(objectToValidate);
         if (!violations.isEmpty()) {
-            Set<String> errorMessages =  violations.stream()
+            Set<String> errorMessages = violations.stream()
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.toSet());
-            throw  new ObjectNotValidException(errorMessages);
+            throw new ObjectNotValidException(errorMessages);
         }
     }
 }

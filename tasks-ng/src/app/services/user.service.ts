@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthenticationService} from "./authentication.service";
 import jwtDecode from "jwt-decode";
 import {Task} from "../interfaces/Task";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserDTO} from "../interfaces/UserDTO";
 
@@ -22,7 +22,6 @@ export class UserService {
   }
 
 
-
   getUsername(): string | null {
     if (this.decodedToken) {
       return this.decodedToken.sub;
@@ -35,8 +34,8 @@ export class UserService {
     return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, httpOptions)
   }
 
-  getUsernames():Observable<UserDTO[]>{
-    return this.http.get<UserDTO[]>(`${this.apiUrl}/usernames`,this.authService.httpOptions)
+  getUsernames(): Observable<UserDTO[]> {
+    return this.http.get<UserDTO[]>(`${this.apiUrl}/usernames`, this.authService.httpOptions)
   }
 
 }

@@ -44,8 +44,6 @@ public class TaskServiceTests {
 
     @BeforeEach
     public void init() {
-        MockitoAnnotations.openMocks(this);
-        taskService = new TaskServiceImpl(taskRepository, userService);
         tasks = new ArrayList<>();
         task1 = new Task("test1", LocalDate.now(), new User());
         task2 = new Task("test2", LocalDate.now().plusMonths(1), new User());
@@ -55,10 +53,10 @@ public class TaskServiceTests {
 
     @Test
     public void getAllTasks_test() {
-        tasks.add(task1);
-        tasks.add(task2);
         when(taskRepository.findAll((Sort) any())).thenReturn(tasks);
+
         List<Task> actualTasks = taskService.getAll();
+
         assertEquals(tasks, actualTasks);
         verify(taskRepository).findAll((Sort) any());
     }
@@ -68,7 +66,9 @@ public class TaskServiceTests {
         Long id = 1L;
         task1.setId(id);
         when(taskRepository.findById(id)).thenReturn(Optional.of(task1));
+
         Optional<Task> result = taskService.getTask(id);
+
         assertTrue(result.isPresent());
         assertEquals(Optional.of(task1), result);
         verify(taskRepository).findById(id);
@@ -80,6 +80,7 @@ public class TaskServiceTests {
         task2.getAssignedTo().setUsername(username);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(task1.getAssignedTo()));
         when(taskRepository.findAllByAssignedToOrderByDueDateDesc(task1.getAssignedTo())).thenReturn(tasks);
+
         List<Task> result = taskService.getAssignedTasks(username);
 
         assertEquals(tasks, result);
@@ -90,16 +91,18 @@ public class TaskServiceTests {
     public void getAssignedTasks_UserDoesNotExists() {
         when(userService.getUserByUsername(username)).thenReturn(Optional.empty());
 
-        assertThrows(UsernameNotFoundException.class, () -> taskService.getAssignedTasks(username));
+        assertThrows(UserNotFoundException.class, () -> taskService.getAssignedTasks(username));
     }
 
     @Test
-    public void createTask_test() {
+    public void createTask_test() throws UserNotFoundException {
         User user = new User();
         user.setUsername(username);
         TaskDTO taskDTO = new TaskDTO("testtask", LocalDate.now(), user.getUsername(), Status.NEW);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
+
         taskService.createTask(taskDTO);
+
         assertEquals(1, user.getAssignedTasks().size());
         verify(userService, times(1)).saveUser(user);
         verify(taskRepository, times(1)).save(any(Task.class));
@@ -112,7 +115,9 @@ public class TaskServiceTests {
         task1.setId(1l);
         task1.setAssignedTo(user);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
+
         taskService.deleteTask(task1);
+
         assertEquals(0, user.getAssignedTasks().size());
         verify(userService, times(1)).saveUser(user);
         verify(taskRepository, times(1)).delete(task1);
@@ -126,12 +131,15 @@ public class TaskServiceTests {
         taskDTO.setId(1l);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
         when(taskRepository.findById(1l)).thenReturn(Optional.of(task1));
+
         taskService.editTask(taskDTO);
+
         verify(userService, times(1)).getUserByUsername(username);
         verify(taskRepository, times(1)).findById(1L);
         ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
         verify(taskRepository, times(1)).save(captor.capture());
         Task savedTask = captor.getValue();
+
         assertEquals("editedTask1", savedTask.getSubject());
         assertEquals(LocalDate.now().plusDays(1), savedTask.getDueDate());
         assertEquals(Status.NEW, savedTask.getStatus());
@@ -142,7 +150,9 @@ public class TaskServiceTests {
     public void testSearchTasks() {
         SearchReq searchReq = new SearchReq("test", LocalDate.now(), Status.NEW, "Task 1");
         when(taskRepository.findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate())).thenReturn(tasks);
+
         List<Task> foundTasks = taskService.searchTasks(searchReq);
+
         assertEquals(tasks, foundTasks);
         verify(taskRepository, times(1)).findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate());
     }

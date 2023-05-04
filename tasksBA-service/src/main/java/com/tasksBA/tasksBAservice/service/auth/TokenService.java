@@ -80,8 +80,8 @@ public class TokenService {
 
     public Optional<String> getJwtFromRequest(HttpServletRequest request) {
         String tokenHeader = request.getHeader(TOKEN_HEADER);
-        if (StringUtils.hasText(tokenHeader) && tokenHeader.startsWith(TOKEN_PREFIX)){
-            return Optional.of(tokenHeader.replace(TOKEN_PREFIX,""));
+        if (StringUtils.hasText(tokenHeader) && tokenHeader.startsWith(TOKEN_PREFIX)) {
+            return Optional.of(tokenHeader.replace(TOKEN_PREFIX, ""));
         }
         return Optional.empty();
     }

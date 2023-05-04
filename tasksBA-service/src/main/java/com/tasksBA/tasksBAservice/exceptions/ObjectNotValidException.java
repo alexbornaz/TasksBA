@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
-public class ObjectNotValidException extends RuntimeException{
+public class ObjectNotValidException extends RuntimeException {
     private final Set<String> errorMessages;
 
     public ObjectNotValidException(Set<String> errorMessages) {

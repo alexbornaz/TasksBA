@@ -1,3 +1,3 @@
-export interface UserDTO{
-  username:string
+export interface UserDTO {
+  username: string
 }

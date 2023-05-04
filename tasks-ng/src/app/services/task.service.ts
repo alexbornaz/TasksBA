@@ -15,7 +15,7 @@ export class TaskService {
   private refreshSubject = new Subject<void>();
   refreshComponent$ = this.refreshSubject.asObservable()
 
-  triggerRefresh(){
+  triggerRefresh() {
     this.refreshSubject.next();
   }
 
@@ -40,6 +40,6 @@ export class TaskService {
   }
 
   createTask(task: Task): Observable<any> {
-    return this.http.post(`${this.apiUrl}/add`,task,this.authService.httpOptions)
+    return this.http.post(`${this.apiUrl}/add`, task, this.authService.httpOptions)
   }
 }

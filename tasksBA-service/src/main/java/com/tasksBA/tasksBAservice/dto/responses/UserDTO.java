@@ -1,6 +1,5 @@
 package com.tasksBA.tasksBAservice.dto.responses;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

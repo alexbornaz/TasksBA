@@ -5,7 +5,7 @@ public class AuthenticationException extends Exception {
         super(cause);
     }
 
-    public AuthenticationException(String message){
+    public AuthenticationException(String message) {
         super(message);
     }
 }

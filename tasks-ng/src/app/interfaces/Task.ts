@@ -1,9 +1,9 @@
 import {Status} from "../Status";
 
 export interface Task {
-  id?:number,
+  id?: number,
   subject: string;
   dueDate: Date;
-  status:Status;
-  assignedTo:any;
+  status: Status;
+  assignedTo: any;
 }

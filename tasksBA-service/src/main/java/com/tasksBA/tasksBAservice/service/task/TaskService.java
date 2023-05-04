@@ -10,10 +10,13 @@ import java.util.Optional;
 
 public interface TaskService {
     List<Task> getAll();
+
     Optional<Task> getTask(Long id);
+
     List<Task> getAssignedTasks(String username) throws UserNotFoundException;
 
-    void createTask(TaskDTO taskDTO);
+    void createTask(TaskDTO taskDTO) throws UserNotFoundException;
+
     void deleteTask(Task task);
 
     void editTask(TaskDTO taskDTO);

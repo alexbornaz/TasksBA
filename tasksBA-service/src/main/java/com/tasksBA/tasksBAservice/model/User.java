@@ -2,13 +2,11 @@ package com.tasksBA.tasksBAservice.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.*;
 
@@ -41,7 +39,7 @@ public class User implements UserDetails {
     public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
-        this.password =password;
+        this.password = password;
         this.role = role;
     }
 
@@ -84,10 +82,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void addTaskToAssigned(Task task){
+    public void addTaskToAssigned(Task task) {
         assignedTasks.add(task);
     }
-    public void removeTaskFromAssigned(Task task){
+
+    public void removeTaskFromAssigned(Task task) {
         assignedTasks.remove(task);
     }
 }

@@ -33,7 +33,8 @@ export class SearchTaskComponent implements OnInit {
     event.preventDefault();
     this.search.emit(this.searchForm);
   }
-  onReset(){
+
+  onReset() {
     this.searchForm.reset()
   }
 }

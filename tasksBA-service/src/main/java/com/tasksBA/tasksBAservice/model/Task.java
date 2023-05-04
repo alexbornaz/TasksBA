@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -25,11 +24,11 @@ public class Task {
     @JoinColumn(name = "assigned_to_username", referencedColumnName = "username")
     private User assignedTo;
 
-    public Task(String subject, LocalDate dueDate,User assignedTo) {
+    public Task(String subject, LocalDate dueDate, User assignedTo) {
         this.subject = subject;
         this.dueDate = dueDate;
         this.status = Status.NEW;
-        this.assignedTo=assignedTo;
+        this.assignedTo = assignedTo;
     }
 
 

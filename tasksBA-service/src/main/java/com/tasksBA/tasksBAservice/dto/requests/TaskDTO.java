@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class TaskDTO {
+
     private Long id;
     private String subject;
     private LocalDate dueDate;

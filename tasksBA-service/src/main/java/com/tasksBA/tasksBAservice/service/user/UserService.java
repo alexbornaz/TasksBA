@@ -9,9 +9,11 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> getUsers();
+
     Optional<User> getUserByUsername(String username);
 
     boolean hasUserWithUsername(String username);
+
     boolean hasUserWithEmail(String email);
 
     User saveUser(User user);
