@@ -9,6 +9,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {JwtModule, JwtModuleOptions} from "@auth0/angular-jwt";
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {GenericModalComponent} from './generic-modal/generic-modal.component';
 
 const JWT_Module_Options: JwtModuleOptions = {
   config: {
@@ -20,7 +21,8 @@ const JWT_Module_Options: JwtModuleOptions = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GenericModalComponent
   ],
   imports: [
     BrowserModule,

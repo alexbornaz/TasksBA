@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ObjectNotValidException.class)
@@ -23,6 +25,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleException(UserNotFoundException exception) {
         return ResponseEntity.unprocessableEntity().body(new MessageResp(exception.getMessage()));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> handleException(NoSuchElementException exception) {
+        return ResponseEntity.status(404).body(new MessageResp(exception.getMessage()));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleException(RuntimeException exception) {
+        return ResponseEntity.status(500).body(new MessageResp(exception.getMessage()));
     }
 
 

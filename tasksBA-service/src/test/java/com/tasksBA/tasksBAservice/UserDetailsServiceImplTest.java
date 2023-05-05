@@ -13,8 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceImplTest {
@@ -26,27 +28,27 @@ public class UserDetailsServiceImplTest {
     private String username;
 
     @BeforeEach
-    public void init(){
-        username="testuser";
+    public void init() {
+        username = "testuser";
     }
 
     @Test
-    public void shouldLoadByUsername_ReturnUser(){
+    public void shouldLoadByUsername_ReturnUser() {
         User expectedUser = new User();
         expectedUser.setUsername(username);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(expectedUser));
 
         userDetailsService.loadUserByUsername(username);
 
-        assertEquals(username,expectedUser.getUsername());
+        assertEquals(username, expectedUser.getUsername());
         verify(userService).getUserByUsername(username);
     }
 
     @Test
-    public void shouldThrowError_WhenLoadByUsername(){
+    public void shouldThrowError_WhenLoadByUsername() {
         when(userService.getUserByUsername(username)).thenThrow(new UsernameNotFoundException("error"));
 
-        assertThrows(UsernameNotFoundException.class,()->userDetailsService.loadUserByUsername(username));
+        assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(username));
         verify(userService).getUserByUsername(username);
     }
 }

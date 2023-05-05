@@ -101,8 +101,8 @@ export class TaskDetailComponent implements OnInit {
           this.taskForm.disable()
           this.toastr.success(msg, "success", {progressBar: true, closeButton: true})
         },
-        error:(err)=>{
-              this.toastr.error(err, "error", {progressBar: true, closeButton: true})
+        error: (err) => {
+          this.toastr.error(err, "error", {progressBar: true, closeButton: true})
         }
       }
     );

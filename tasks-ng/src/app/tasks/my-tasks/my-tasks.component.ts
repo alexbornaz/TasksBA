@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Task} from "../../interfaces/Task";
-import {Observable, of, Subscription} from "rxjs";
+import {catchError, Observable, of, Subscription} from "rxjs";
 import {TaskService} from "../../services/task.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-my-tasks',
@@ -11,10 +12,10 @@ import {TaskService} from "../../services/task.service";
 })
 export class MyTasksComponent implements OnInit {
   private username?: string
-  tasks$: Observable<Task[]> = of([])
+  tasks$?: Observable<Task[]> = of([])
   private refreshSub?: Subscription
 
-  constructor(private userService: UserService, private taskService: TaskService) {
+  constructor(private userService: UserService, private taskService: TaskService, private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -33,6 +34,11 @@ export class MyTasksComponent implements OnInit {
   }
 
   getTasks(): Observable<Task[]> {
-    return this.userService.getTasks(this.username)
+    return this.userService.getAssignedTasks(this.username).pipe(
+      catchError((err) => {
+        this.toastr.error(err, "error", {progressBar: true})
+        return of([])
+      })
+    );
   }
 }

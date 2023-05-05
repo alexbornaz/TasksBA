@@ -10,14 +10,12 @@ import com.tasksBA.tasksBAservice.service.auth.TokenService;
 import com.tasksBA.tasksBAservice.service.auth.UserAuthService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import com.tasksBA.tasksBAservice.validator.ObjectValidator;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -143,7 +141,7 @@ public class UserAuthServiceTests {
         when(passwordEncoder.encode(signUpReq.getPassword())).thenReturn(encodedPass);
         when(userService.saveUser(any(User.class))).thenThrow(new RuntimeException("db error"));
 
-        assertThrows(RuntimeException.class, ()->userAuthService.addUser(signUpReq));
+        assertThrows(RuntimeException.class, () -> userAuthService.addUser(signUpReq));
         verify(userService).saveUser(any(User.class));
     }
 

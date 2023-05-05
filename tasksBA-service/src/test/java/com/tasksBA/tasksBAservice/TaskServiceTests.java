@@ -15,17 +15,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,10 +66,8 @@ public class TaskServiceTests {
         task1.setId(id);
         when(taskRepository.findById(id)).thenReturn(Optional.of(task1));
 
-        Optional<Task> result = taskService.getTask(id);
-
-        assertTrue(result.isPresent());
-        assertEquals(Optional.of(task1), result);
+        Task result = taskService.getTask(id);
+        assertEquals(task1, result);
         verify(taskRepository).findById(id);
     }
 
@@ -109,22 +106,25 @@ public class TaskServiceTests {
     }
 
     @Test
-    public void deleteTask_testO() {
+    public void deleteTask_testO() throws UserNotFoundException {
         User user = new User();
         user.setUsername(username);
         task1.setId(1l);
         task1.setAssignedTo(user);
+        user.addTaskToAssigned(task1);
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
+        when(taskRepository.findById(task1.getId())).thenReturn(Optional.of(task1));
+        when(userService.saveUser(user)).thenReturn(user);
 
-        taskService.deleteTask(task1);
+        taskService.deleteTask(1l);
 
         assertEquals(0, user.getAssignedTasks().size());
         verify(userService, times(1)).saveUser(user);
-        verify(taskRepository, times(1)).delete(task1);
+        verify(taskRepository, times(1)).deleteById(task1.getId());
     }
 
     @Test
-    public void editTask_test() {
+    public void editTask_test() throws UserNotFoundException {
         User user = new User();
         user.setUsername(username);
         TaskDTO taskDTO = new TaskDTO("editedTask1", LocalDate.now().plusDays(1), user.getUsername(), Status.NEW);

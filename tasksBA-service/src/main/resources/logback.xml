@@ -22,12 +22,12 @@
         </rollingPolicy>
     </appender>
     <root level="INFO">
-        <appender-ref ref="File" />
-        <appender-ref ref="Console" />
+        <appender-ref ref="File"/>
+        <appender-ref ref="Console"/>
     </root>
 
     <logger name="com.grandProject.eLearn" level="DEBUG" additivity="false">
-        <appender-ref ref="File" />
-        <appender-ref ref="Console" />
+        <appender-ref ref="File"/>
+        <appender-ref ref="Console"/>
     </logger>
 </configuration>

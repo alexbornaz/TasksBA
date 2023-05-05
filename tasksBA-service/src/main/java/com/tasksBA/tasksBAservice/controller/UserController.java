@@ -1,6 +1,5 @@
 package com.tasksBA.tasksBAservice.controller;
 
-import com.tasksBA.tasksBAservice.dto.responses.MessageResp;
 import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
 import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
@@ -25,12 +24,8 @@ public class UserController {
 
     @GetMapping("/tasks/{username}")
     public ResponseEntity<?> getAssignedTasks(@PathVariable String username) throws UserNotFoundException {
-        try {
-            List<Task> tasks = taskService.getAssignedTasks(username);
-            return ResponseEntity.ok().body(tasks);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.ok().body(new MessageResp(e.getMessage()));
-        }
+        List<Task> tasks = taskService.getAssignedTasks(username);
+        return ResponseEntity.ok().body(tasks);
     }
 
     @DeleteMapping("/{usernane}")

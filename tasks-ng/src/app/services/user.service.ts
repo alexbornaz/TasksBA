@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {AuthenticationService} from "./authentication.service";
 import jwtDecode from "jwt-decode";
 import {Task} from "../interfaces/Task";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {catchError, map, Observable, throwError} from "rxjs";
 import {UserDTO} from "../interfaces/UserDTO";
 
 @Injectable({
@@ -29,9 +29,19 @@ export class UserService {
     return null;
   }
 
-  getTasks(username: string | undefined): Observable<Task[]> {
-    let httpOptions = this.authService.httpOptions;
-    return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, httpOptions)
+  getAssignedTasks(username: string | undefined): Observable<Task[]> {
+    return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, {
+      ...this.authService.httpOptions,
+      observe: "response"
+    })
+      .pipe(
+        map((response: HttpResponse<any>) => {
+          return response.body
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error.message)
+        })
+      )
   }
 
   getUsernames(): Observable<UserDTO[]> {

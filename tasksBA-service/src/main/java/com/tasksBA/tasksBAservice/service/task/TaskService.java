@@ -6,7 +6,6 @@ import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskService {
     List<Task> getAll();

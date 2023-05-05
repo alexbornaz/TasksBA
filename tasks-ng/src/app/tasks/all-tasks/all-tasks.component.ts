@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TaskService} from "../../services/task.service";
 import {Observable, of, Subscription} from "rxjs";
 import {Task} from 'src/app/interfaces/Task';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormGroup} from "@angular/forms";
 import {SearchReq} from "../../interfaces/SearchReq";
 
 @Component({
@@ -12,20 +12,12 @@ import {SearchReq} from "../../interfaces/SearchReq";
 })
 export class AllTasksComponent implements OnInit {
   tasks: Observable<Task[]> = of([])
-  searchForm: FormGroup;
   private refreshSub?: Subscription;
 
-  constructor(private taskService: TaskService, private formBuilder: FormBuilder) {
-    this.searchForm = this.formBuilder.group({
-      assignedTo: '',
-      dueDate: '',
-      status: '',
-      subject: ''
-    });
+  constructor(private taskService: TaskService) {
   }
 
   ngOnInit(): void {
-    console.log("executed")
     this.refreshSub = this.taskService.refreshComponent$.subscribe(() => {
       this.tasks = this.getAllTasks();
     })

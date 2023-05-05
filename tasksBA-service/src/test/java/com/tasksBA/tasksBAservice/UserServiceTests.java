@@ -3,12 +3,10 @@ package com.tasksBA.tasksBAservice;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.UserRepository;
 import com.tasksBA.tasksBAservice.service.user.UserServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;

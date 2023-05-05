@@ -20,7 +20,7 @@ export class GenericModalComponent implements OnInit {
   }
 
   public onCancel(): void {
-      this.activeModal.dismiss();
+    this.activeModal.dismiss();
   }
 
   public onConfirm(): void {

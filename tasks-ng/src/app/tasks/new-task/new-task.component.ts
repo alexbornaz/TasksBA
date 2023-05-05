@@ -46,17 +46,18 @@ export class NewTaskComponent implements OnInit {
       assignedTo: this.newTaskForm.get('assignedTo')!.value
 
     }
-    this.taskService.createTask(newTask).subscribe(response => {
-      this.serverMessage = response.message
-      this.newTaskForm.reset()
-      this.activeModal.close();
-      if (response.success) {
-        this.taskService.triggerRefresh();
-        this.toastr.success(this.serverMessage, 'success', {progressBar: true})
-      } else {
-        this.toastr.error(this.serverMessage, "error", {progressBar: true, closeButton: true})
+    this.taskService.createTask(newTask).subscribe(
+      {
+        next: (msg) => {
+          this.newTaskForm.reset()
+          this.activeModal.close()
+          this.toastr.success(msg, 'success', {progressBar: true})
+          this.taskService.triggerRefresh();
+        },
+        error: (error) => {
+          this.toastr.error(error, "error", {progressBar: true, closeButton: true})
+        }
       }
-
-    })
+    )
   }
 }
