@@ -81,7 +81,7 @@ public class UserAuthService {
             throw new AuthenticationException(new EmailAlreadyExistsException("Email already exists"));
         }
         addUser(signUpRequest);
-            emailService.sendRegistrationMail(signUpRequest.getEmail(),signUpRequest.getUsername());
+        emailService.sendRegistrationMail(signUpRequest.getEmail(), signUpRequest.getUsername());
         return authenticate(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 

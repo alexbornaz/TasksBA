@@ -47,7 +47,7 @@ public class EmailService {
     }
 
     @Async
-    public void sendTaskDetailsEmail(String to, Task task,String title){
+    public void sendTaskDetailsEmail(String to, Task task, String title) {
         try {
             MimeMailMessage message = new MimeMailMessage(mailSender.createMimeMessage());
             MimeMessageHelper helper = new MimeMessageHelper(message.getMimeMessage(),
@@ -55,11 +55,11 @@ public class EmailService {
                     StandardCharsets.UTF_8.name());
             String mailContent = templateReader.readHtmlTemplateFrom("templates/taskAssign.html");
 
-            mailContent=mailContent.replace("${title}",title);
-            mailContent=mailContent.replace("${subject}",task.getSubject());
-            mailContent=mailContent.replace("${dueDate}",task.getDueDate().toString());
-            mailContent=mailContent.replace("${status}",task.getStatus().toString());
-            mailContent=mailContent.replace("${assignedTo}",task.getAssignedTo().getUsername());
+            mailContent = mailContent.replace("${title}", title);
+            mailContent = mailContent.replace("${subject}", task.getSubject());
+            mailContent = mailContent.replace("${dueDate}", task.getDueDate().toString());
+            mailContent = mailContent.replace("${status}", task.getStatus().toString());
+            mailContent = mailContent.replace("${assignedTo}", task.getAssignedTo().getUsername());
 
             helper.setFrom("eosit.alexbornaz@gmail.com", "TO-DO-APP");
             helper.setTo(to);
