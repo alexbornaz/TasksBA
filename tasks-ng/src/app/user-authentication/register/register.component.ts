@@ -24,6 +24,7 @@ export class RegisterComponent {
   });
 
   onSubmit() {
+
     if (this.registerForm.valid) {
       const registerReq: RegisterReq = {
         username: this.registerForm.value.username ?? "",
@@ -36,9 +37,9 @@ export class RegisterComponent {
             this.router.navigate([''])
           },
           error: (error) => {
+            this.registerForm.reset()
             this.serverMessage = error
             this.showMessage = true;
-            this.registerForm.reset()
           }
         }
       )

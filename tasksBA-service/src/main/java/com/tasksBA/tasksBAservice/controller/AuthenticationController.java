@@ -32,4 +32,5 @@ public class AuthenticationController {
         String token = userAuthService.login(loginReq);
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, token).build();
     }
+
 }

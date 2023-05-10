@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, DoCheck} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthenticationService} from "./services/authentication.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
@@ -10,7 +10,7 @@ import {NewTaskComponent} from "./tasks/new-task/new-task.component";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements DoCheck{
   title = 'tasks-ng';
   isMainWindowOn = false;
 

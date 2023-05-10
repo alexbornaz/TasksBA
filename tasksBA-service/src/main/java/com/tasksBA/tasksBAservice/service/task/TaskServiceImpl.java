@@ -7,6 +7,7 @@ import com.tasksBA.tasksBAservice.model.Status;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.TaskRepository;
+import com.tasksBA.tasksBAservice.service.EmailService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -22,10 +23,12 @@ import java.util.NoSuchElementException;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final EmailService emailService;
 
-    public TaskServiceImpl(TaskRepository taskRepository, UserService userService) {
+    public TaskServiceImpl(TaskRepository taskRepository, UserService userService, EmailService emailService) {
         this.taskRepository = taskRepository;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
 
@@ -62,6 +65,12 @@ public class TaskServiceImpl implements TaskService {
             taskRepository.save(task);
             user.addTaskToAssigned(task);
             userService.saveUser(user);
+            try {
+                String title = "You have been assigned a new task!";
+                emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
+            } catch (Exception e) {
+                log.error("Failed to send info email created task to {}", user.getEmail(), e);
+            }
         } catch (Exception e) {
             log.error("Error creating task: {}", e.getMessage(), e);
             throw new RuntimeException("Something went wrong, could not create the task");
@@ -76,11 +85,14 @@ public class TaskServiceImpl implements TaskService {
 
         User user = userService.getUserByUsername(taskToBeDeleted.getAssignedTo().getUsername())
                 .orElseThrow(() -> new UserNotFoundException("There is no user with username " + taskToBeDeleted.getAssignedTo().getUsername()));
-
         user.removeTaskFromAssigned(taskToBeDeleted);
-        userService.saveUser(user);
-
-        taskRepository.deleteById(taskId);
+        try {
+            userService.saveUser(user);
+            taskRepository.deleteById(taskId);
+        } catch (Exception e) {
+            log.error("Failed deleting task with id {}", taskId, e);
+            throw new RuntimeException("Something went wrong, could not delete the task");
+        }
 
     }
 
@@ -91,12 +103,25 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new NoSuchElementException(errMsg));
         User user = userService.getUserByUsername(taskDTO.getAssignedTo())
                 .orElseThrow(() -> new UserNotFoundException(errMsg));
+        boolean unchangedAssignedTo = task.getAssignedTo().getUsername().equals(taskDTO.getAssignedTo());
         try {
             task.setSubject(taskDTO.getSubject());
             task.setDueDate(taskDTO.getDueDate());
             task.setStatus(taskDTO.getStatus());
             task.setAssignedTo(user);
             taskRepository.save(task);
+            try {
+                String title;
+                if (unchangedAssignedTo) {
+                    title = "Task Update:";
+                    emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
+                } else {
+                    title = "You have been assigned a new task";
+                    emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
+                }
+            } catch (Exception e) {
+                log.error("Failed attempt to send task update to: {}", user.getUsername(), e);
+            }
         } catch (Exception e) {
             log.error("Couldn't edit the task with id: {}", task.getId(), e);
             throw new RuntimeException("Something went wrong, editing the task with id: " + task.getId());

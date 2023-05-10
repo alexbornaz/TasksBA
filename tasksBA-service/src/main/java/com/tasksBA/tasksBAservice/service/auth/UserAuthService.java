@@ -9,6 +9,7 @@ import com.tasksBA.tasksBAservice.exceptions.auth.UsernameAlreadyExistsException
 import com.tasksBA.tasksBAservice.exceptions.auth.UsernameOrPasswordExistsException;
 import com.tasksBA.tasksBAservice.model.Role;
 import com.tasksBA.tasksBAservice.model.User;
+import com.tasksBA.tasksBAservice.service.EmailService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import com.tasksBA.tasksBAservice.validator.ObjectValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +32,16 @@ public class UserAuthService {
 
     private final ObjectValidator<SignUpReq> signUpValidator;
 
-    public UserAuthService(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService, ObjectValidator<LoginReq> loginValidator, ObjectValidator<SignUpReq> signUpValidator) {
+    private final EmailService emailService;
+
+    public UserAuthService(UserService userService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, TokenService tokenService, ObjectValidator<LoginReq> loginValidator, ObjectValidator<SignUpReq> signUpValidator, EmailService emailService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
         this.loginValidator = loginValidator;
         this.signUpValidator = signUpValidator;
+        this.emailService = emailService;
     }
 
     public User mapSignUpRequestToUser(SignUpReq signUpRequest) {
@@ -77,6 +81,7 @@ public class UserAuthService {
             throw new AuthenticationException(new EmailAlreadyExistsException("Email already exists"));
         }
         addUser(signUpRequest);
+            emailService.sendRegistrationMail(signUpRequest.getEmail(),signUpRequest.getUsername());
         return authenticate(signUpRequest.getUsername(), signUpRequest.getPassword());
     }
 
@@ -102,4 +107,6 @@ public class UserAuthService {
             throw new UserNotFoundException("User does not exist");
         }
     }
+
+
 }
