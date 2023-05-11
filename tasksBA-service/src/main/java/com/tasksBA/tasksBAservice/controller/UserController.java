@@ -28,16 +28,10 @@ public class UserController {
         return ResponseEntity.ok().body(tasks);
     }
 
-    @DeleteMapping("/{usernane}")
-    public ResponseEntity<String> deleteUser(@PathVariable String usernane) {
-        User user = userService.getUserByUsername(usernane).get();
-        try {
-            userService.deleteUser(user);
-            return ResponseEntity.ok().body("User deleted");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok().body("Couldn't delete user");
-        }
+    @DeleteMapping("/{username}")
+    public ResponseEntity<String> deleteUser(@PathVariable String username) throws UserNotFoundException {
+        userService.deleteUserByUsername(username);
+        return ResponseEntity.ok().body("User deleted");
     }
 
     @GetMapping("/usernames")

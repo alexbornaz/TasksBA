@@ -1,1 +1,16 @@
+.row {
+  position: relative;
+}
 
+.fixed-column {
+  position: sticky;
+  top: 0;
+  height: 92vh;
+  overflow-y: auto;
+  border-right: black solid 2px;
+}
+
+.tasks-container {
+  height: 91vh;
+  overflow-y:auto;
+}

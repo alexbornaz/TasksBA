@@ -6,6 +6,7 @@ import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.exceptions.auth.AuthenticationException;
 import com.tasksBA.tasksBAservice.model.Role;
 import com.tasksBA.tasksBAservice.model.User;
+import com.tasksBA.tasksBAservice.service.EmailService;
 import com.tasksBA.tasksBAservice.service.auth.TokenService;
 import com.tasksBA.tasksBAservice.service.auth.UserAuthService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
@@ -41,6 +42,9 @@ public class UserAuthServiceTests {
 
     @Mock
     private TokenService tokenService;
+
+    @Mock
+    private EmailService emailService;
     @Mock
     ObjectValidator<LoginReq> objectValidator;
 

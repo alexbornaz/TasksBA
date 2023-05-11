@@ -63,14 +63,8 @@ public class TaskServiceImpl implements TaskService {
             Task task = new Task(taskDTO.getSubject(), taskDTO.getDueDate(), user);
             task.setStatus(taskDTO.getStatus());
             taskRepository.save(task);
-            user.addTaskToAssigned(task);
-            userService.saveUser(user);
-            try {
-                String title = "You have been assigned a new task!";
-                emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
-            } catch (Exception e) {
-                log.error("Failed to send info email created task to {}", user.getEmail(), e);
-            }
+            addTaskToAssigned(user,task);
+            taskEmailDecider(task,user,false);
         } catch (Exception e) {
             log.error("Error creating task: {}", e.getMessage(), e);
             throw new RuntimeException("Something went wrong, could not create the task");
@@ -85,9 +79,8 @@ public class TaskServiceImpl implements TaskService {
 
         User user = userService.getUserByUsername(taskToBeDeleted.getAssignedTo().getUsername())
                 .orElseThrow(() -> new UserNotFoundException("There is no user with username " + taskToBeDeleted.getAssignedTo().getUsername()));
-        user.removeTaskFromAssigned(taskToBeDeleted);
         try {
-            userService.saveUser(user);
+            removeTaskFromAssigned(user, taskToBeDeleted);
             taskRepository.deleteById(taskId);
         } catch (Exception e) {
             log.error("Failed deleting task with id {}", taskId, e);
@@ -96,35 +89,54 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
+    private void removeTaskFromAssigned(User user, Task task) {
+        user.removeTaskFromAssigned(task);
+        userService.saveUser(user);
+    }
+
+    private void addTaskToAssigned(User user, Task task) {
+        user.addTaskToAssigned(task);
+        userService.saveUser(user);
+    }
+
     @Override
     public void editTask(TaskDTO taskDTO) throws UserNotFoundException {
         String errMsg = "Task couldn't be edited,something went wrong";
         Task task = taskRepository.findById(taskDTO.getId())
                 .orElseThrow(() -> new NoSuchElementException(errMsg));
-        User user = userService.getUserByUsername(taskDTO.getAssignedTo())
-                .orElseThrow(() -> new UserNotFoundException(errMsg));
-        boolean unchangedAssignedTo = task.getAssignedTo().getUsername().equals(taskDTO.getAssignedTo());
+        User user = task.getAssignedTo();
+        boolean unchangedAssignedTo = user.getUsername().equals(taskDTO.getAssignedTo());
         try {
             task.setSubject(taskDTO.getSubject());
             task.setDueDate(taskDTO.getDueDate());
             task.setStatus(taskDTO.getStatus());
-            task.setAssignedTo(user);
-            taskRepository.save(task);
-            try {
-                String title;
-                if (unchangedAssignedTo) {
-                    title = "Task Update:";
-                    emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
-                } else {
-                    title = "You have been assigned a new task";
-                    emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
-                }
-            } catch (Exception e) {
-                log.error("Failed attempt to send task update to: {}", user.getUsername(), e);
+            if (!unchangedAssignedTo){
+                User newUser = userService.getUserByUsername(taskDTO.getAssignedTo())
+                        .orElseThrow(() -> new UserNotFoundException(errMsg));
+                removeTaskFromAssigned(user,task);
+                addTaskToAssigned(newUser,task);
+                task.setAssignedTo(newUser);
             }
+            taskRepository.save(task);
+            taskEmailDecider(task, user, unchangedAssignedTo);
         } catch (Exception e) {
             log.error("Couldn't edit the task with id: {}", task.getId(), e);
             throw new RuntimeException("Something went wrong, editing the task with id: " + task.getId());
+        }
+    }
+
+    private void taskEmailDecider(Task task, User user, boolean unchangedAssignedTo) {
+        try {
+            String title;
+            if (unchangedAssignedTo) {
+                title = "Task Update:";
+                emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
+            } else {
+                title = "You have been assigned a new task";
+                emailService.sendTaskDetailsEmail(user.getEmail(), task, title);
+            }
+        } catch (Exception e) {
+            log.error("Failed attempt to send task update to: {}", user.getUsername(), e);
         }
     }
 

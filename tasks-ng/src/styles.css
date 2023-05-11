@@ -4,4 +4,13 @@
 
 .table-row:hover {
   background-color: grey;
+  cursor: pointer;
+}
+
+body{
+  background-color: aliceblue;
+}
+
+.thead-row{
+  border: black solid 1px;
 }

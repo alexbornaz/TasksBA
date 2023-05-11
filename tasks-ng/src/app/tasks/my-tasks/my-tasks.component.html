@@ -1,7 +1,7 @@
-<div *ngIf="(tasks$ | async)?.length; else noTasks">
+<div class="mt-2" *ngIf="(tasks$ | async)?.length; else noTasks">
   <table class="table">
     <thead>
-    <tr>
+    <tr class="thead-row">
       <th scope="col">Subject</th>
       <th scope="col">Due Date</th>
       <th scope="col">Status</th>

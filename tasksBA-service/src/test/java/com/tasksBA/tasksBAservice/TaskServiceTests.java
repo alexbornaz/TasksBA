@@ -7,6 +7,7 @@ import com.tasksBA.tasksBAservice.model.Status;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.repository.TaskRepository;
+import com.tasksBA.tasksBAservice.service.EmailService;
 import com.tasksBA.tasksBAservice.service.task.TaskServiceImpl;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,8 @@ public class TaskServiceTests {
     private Task task1;
     private Task task2;
     private List<Task> tasks;
+    @Mock
+    EmailService emailService;
 
     @Mock
     TaskRepository taskRepository;
@@ -127,14 +130,13 @@ public class TaskServiceTests {
     public void editTask_test() throws UserNotFoundException {
         User user = new User();
         user.setUsername(username);
-        TaskDTO taskDTO = new TaskDTO("editedTask1", LocalDate.now().plusDays(1), user.getUsername(), Status.NEW);
+        task1.setAssignedTo(user);
+        TaskDTO taskDTO = new TaskDTO("editedTask1", LocalDate.now().plusDays(1), username, Status.NEW);
         taskDTO.setId(1l);
-        when(userService.getUserByUsername(username)).thenReturn(Optional.of(user));
         when(taskRepository.findById(1l)).thenReturn(Optional.of(task1));
 
         taskService.editTask(taskDTO);
 
-        verify(userService, times(1)).getUserByUsername(username);
         verify(taskRepository, times(1)).findById(1L);
         ArgumentCaptor<Task> captor = ArgumentCaptor.forClass(Task.class);
         verify(taskRepository, times(1)).save(captor.capture());

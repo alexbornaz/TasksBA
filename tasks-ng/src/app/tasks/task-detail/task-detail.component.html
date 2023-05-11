@@ -1,6 +1,8 @@
 <div class="container my-4">
   <h2 *ngIf="editableMode" class="d-flex justify-content-end">Task ID: {{ task?.id }}</h2>
-
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-danger" *ngIf="!editableMode" (click)="deleteTask()">Delete</button>
+  </div>
   <form [formGroup]="taskForm">
     <div class="mb-3">
       <label for="subject" class="form-label">Subject</label>
@@ -48,7 +50,6 @@
             *ngIf="!editableMode"
             (click)="onEdit()">Edit
     </button>
-    <button type="button" class="btn btn-danger" *ngIf="!editableMode" (click)="deleteTask()">Delete</button>
     <div class="d-flex justify-content-end">
       <button type="button" class="btn btn-danger me-auto"
               *ngIf="editableMode"

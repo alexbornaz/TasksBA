@@ -1,20 +1,20 @@
-<div class="flex-container mx-1" *ngIf="isMainWindowOn">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="flex-container " *ngIf="isMainWindowOn">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav ms-4">
         <li class="nav-item">
           <a class="nav-link" routerLink="/">My-tasks</a>
         </li>
         <li>
           <a class="nav-link" routerLink="/all-tasks">All-Tasks</a>
         </li>
+        <li>
+          <button type="button" class="btn btn-success ms-3" (click)="openModal()">+ New Task</button>
+        </li>
       </ul>
     </div>
-    <div class="ml-auto me-4">
-      <button type="button" class="btn btn-success" (click)="openModal()">+ New Task</button>
-    </div>
-    <div class="ml-auto">
-      <button class="btn btn-danger" (click)="handleLogout()">Logout</button>
+    <div class="me-auto">
+      <button class="btn btn-danger me-3" (click)="handleLogout()">Logout</button>
     </div>
   </nav>
 </div>

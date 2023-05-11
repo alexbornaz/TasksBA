@@ -6,15 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageResp {
-    private boolean success;
+
     private String message;
 
-    public MessageResp(String message) {
-        this.message = message;
-    }
 
-    public MessageResp(boolean success, String message) {
-        this.success = success;
+    public MessageResp(String message) {
         this.message = message;
     }
 

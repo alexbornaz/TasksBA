@@ -1,6 +1,7 @@
 package com.tasksBA.tasksBAservice.service.user;
 
 import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
+import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.User;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    void deleteUser(User user);
+    void deleteUserByUsername(String username) throws UserNotFoundException;
 
 
     List<UserDTO> getUsernames();

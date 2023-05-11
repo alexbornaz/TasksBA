@@ -53,7 +53,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message.getMimeMessage(),
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     StandardCharsets.UTF_8.name());
-            String mailContent = templateReader.readHtmlTemplateFrom("templates/taskAssign.html");
+            String mailContent = templateReader.readHtmlTemplateFrom("templates/taskAssignTemplate.html");
 
             mailContent = mailContent.replace("${title}", title);
             mailContent = mailContent.replace("${subject}", task.getSubject());

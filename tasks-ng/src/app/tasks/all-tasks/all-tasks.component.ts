@@ -5,6 +5,7 @@ import {Task} from 'src/app/interfaces/Task';
 import {FormGroup} from "@angular/forms";
 import {SearchReq} from "../../interfaces/SearchReq";
 
+
 @Component({
   selector: 'app-all-tasks',
   templateUrl: './all-tasks.component.html',
