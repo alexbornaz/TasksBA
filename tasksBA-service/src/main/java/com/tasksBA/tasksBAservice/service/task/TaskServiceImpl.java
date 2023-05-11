@@ -63,8 +63,8 @@ public class TaskServiceImpl implements TaskService {
             Task task = new Task(taskDTO.getSubject(), taskDTO.getDueDate(), user);
             task.setStatus(taskDTO.getStatus());
             taskRepository.save(task);
-            addTaskToAssigned(user,task);
-            taskEmailDecider(task,user,false);
+            addTaskToAssigned(user, task);
+            taskEmailDecider(task, user, false);
         } catch (Exception e) {
             log.error("Error creating task: {}", e.getMessage(), e);
             throw new RuntimeException("Something went wrong, could not create the task");
@@ -110,11 +110,11 @@ public class TaskServiceImpl implements TaskService {
             task.setSubject(taskDTO.getSubject());
             task.setDueDate(taskDTO.getDueDate());
             task.setStatus(taskDTO.getStatus());
-            if (!unchangedAssignedTo){
+            if (!unchangedAssignedTo) {
                 User newUser = userService.getUserByUsername(taskDTO.getAssignedTo())
                         .orElseThrow(() -> new UserNotFoundException(errMsg));
-                removeTaskFromAssigned(user,task);
-                addTaskToAssigned(newUser,task);
+                removeTaskFromAssigned(user, task);
+                addTaskToAssigned(newUser, task);
                 task.setAssignedTo(newUser);
             }
             taskRepository.save(task);

@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserByUsername(String username) throws UserNotFoundException {
         User userToBeDeleted = getUserByUsername(username).orElseThrow(
-                ()->new UserNotFoundException("Could not found user "+username+" to delete"));
+                () -> new UserNotFoundException("Could not found user " + username + " to delete"));
         try {
             userRepository.delete(userToBeDeleted);
-        }catch (Exception e){
-            log.error("Failed attempt to delete user {}",username,e);
-            throw new RuntimeException("Could not delete user "+ username +" from database");
+        } catch (Exception e) {
+            log.error("Failed attempt to delete user {}", username, e);
+            throw new RuntimeException("Could not delete user " + username + " from database");
         }
     }
 

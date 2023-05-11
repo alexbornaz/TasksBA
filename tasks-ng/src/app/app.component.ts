@@ -10,7 +10,7 @@ import {NewTaskComponent} from "./tasks/new-task/new-task.component";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements DoCheck{
+export class AppComponent implements DoCheck {
   title = 'tasks-ng';
   isMainWindowOn = false;
 

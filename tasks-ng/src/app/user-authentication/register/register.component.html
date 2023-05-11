@@ -44,7 +44,8 @@
                 </div>
               </div>
             </div>
-            <div *ngIf="showMessage && (!registerForm.controls.username.dirty && !registerForm.controls.password.dirty && !registerForm.controls.email.dirty)">
+            <div
+              *ngIf="showMessage && (!registerForm.controls.username.dirty && !registerForm.controls.password.dirty && !registerForm.controls.email.dirty)">
               <p class="invalid-feedback">{{serverMessage}}</p>
             </div>
             <div class="d-flex justify-content-center mt-4">

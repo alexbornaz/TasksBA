@@ -3,7 +3,6 @@ package com.tasksBA.tasksBAservice.controller;
 import com.tasksBA.tasksBAservice.dto.responses.UserDTO;
 import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
-import com.tasksBA.tasksBAservice.model.User;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import org.springframework.http.ResponseEntity;

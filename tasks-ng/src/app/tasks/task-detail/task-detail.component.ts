@@ -83,7 +83,7 @@ export class TaskDetailComponent implements OnInit {
       status: this.originalTask?.status,
       assignedTo: this.originalTask?.assignedTo.username
     });
-    this.editableMode=false;
+    this.editableMode = false;
     this.taskForm.disable()
   }
 
