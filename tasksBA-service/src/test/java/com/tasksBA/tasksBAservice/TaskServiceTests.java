@@ -55,12 +55,13 @@ public class TaskServiceTests {
 
     @Test
     public void getAllTasks_test() {
-        when(taskRepository.findAll((Sort) any())).thenReturn(tasks);
+        Pageable pageable = PageRequest.of(0,4,Sort.by(Sort.Direction.DESC, "dueDate"));
+        when(taskRepository.findAll(pageable)).thenReturn(new PageImpl<>(tasks,pageable,2));
 
-        List<Task> actualTasks = taskService.getAll();
+        Page<Task> actualTasks = taskService.getAll(1);
 
-        assertEquals(tasks, actualTasks);
-        verify(taskRepository).findAll((Sort) any());
+        assertEquals(tasks, actualTasks.getContent());
+        verify(taskRepository).findAll(pageable);
     }
 
     @Test
@@ -151,13 +152,14 @@ public class TaskServiceTests {
 
     @Test
     public void testSearchTasks() {
+        Pageable pageable = PageRequest.of(0,4,Sort.by(Sort.Direction.DESC, "dueDate"));
         SearchReq searchReq = new SearchReq("test", LocalDate.now(), Status.NEW, "Task 1");
-        when(taskRepository.findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate())).thenReturn(tasks);
+        when(taskRepository.findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate(),pageable)).thenReturn(new PageImpl<>(tasks,pageable,2));
 
-        List<Task> foundTasks = taskService.searchTasks(searchReq);
+        Page<Task> foundTasks = taskService.searchTasks(searchReq,1);
 
-        assertEquals(tasks, foundTasks);
-        verify(taskRepository, times(1)).findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate());
+        assertEquals(tasks, foundTasks.getContent());
+        verify(taskRepository, times(1)).findTasksBySearchReq(searchReq.getAssignedTo(), searchReq.getSubject(), searchReq.getStatus(), searchReq.getDueDate(),pageable);
     }
 
 }
