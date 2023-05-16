@@ -5,6 +5,7 @@ import {Task} from "../interfaces/Task";
 import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {UserDTO} from "../interfaces/UserDTO";
+import {Pagination} from "../interfaces/Pagination";
 
 @Injectable({
   providedIn: 'root'
@@ -29,14 +30,21 @@ export class UserService {
     return null;
   }
 
-  getAssignedTasks(username: string | undefined): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}/tasks/${username}`, {
+  getAssignedTasks(username: string | undefined, askedPage: number): Observable<Pagination<Task>> {
+    return this.http.get<Pagination<Task>>(`${this.apiUrl}/tasks/${username}?page=${askedPage}`, {
       ...this.authService.httpOptions,
       observe: "response"
     })
       .pipe(
         map((response: HttpResponse<any>) => {
-          return response.body
+          console.log(response.body
+          )
+          const page: Pagination<Task> = {
+            items: response.body.content,
+            currentPage: response.body.pageable.pageNumber + 1,
+            totalPages: response.body.totalPages
+          }
+          return page;
         }),
         catchError((error: HttpErrorResponse) => {
           return throwError(error.error.message)

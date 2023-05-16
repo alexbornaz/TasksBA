@@ -14,29 +14,59 @@ import {SearchReq} from "../../interfaces/SearchReq";
 export class AllTasksComponent implements OnInit {
   tasks: Observable<Task[]> = of([])
   private refreshSub?: Subscription;
+  protected currentPage: number = 1
+  protected totalPages: number = 0
+  searchParams?: SearchReq;
 
   constructor(private taskService: TaskService) {
   }
 
   ngOnInit(): void {
     this.refreshSub = this.taskService.refreshComponent$.subscribe(() => {
-      this.tasks = this.getAllTasks();
+      this.getAllTasks(this.currentPage);
     })
-    this.tasks = this.getAllTasks();
+    this.getAllTasks(this.currentPage);
   }
 
-  getAllTasks(): Observable<Task[]> {
-    return this.taskService.getAllTasks()
+
+  getAllTasks(page: number) {
+    this.taskService.getAllTasks(page).subscribe((tasks) => {
+      this.tasks = of(tasks.items);
+      this.currentPage = tasks.currentPage;
+      this.totalPages = tasks.totalPages;
+    });
   }
+
 
   onSearch(searchParams: FormGroup) {
-    const searchTerms: SearchReq = {
+    this.searchParams = {
       subject: searchParams.get('subject')!.value,
       assignedTo: searchParams.get('assignedTo')!.value,
       dueDate: searchParams.get('dueDate')!.value,
       status: searchParams.get('status')!.value
     }
-    this.tasks = this.taskService.getTasksBySearchTerms(searchTerms)
+    const initialPage = 1;
+    this.getTasksByPage(initialPage)
   }
 
+  getTasksByPage(page: number): void {
+    if (this.searchParams) {
+      this.taskService.getTasksBySearchTerms(this.searchParams, page).subscribe((pagination) => {
+        this.tasks = of(pagination.items);
+        this.currentPage = pagination.currentPage;
+        this.totalPages = pagination.totalPages;
+      });
+    } else {
+      this.taskService.getAllTasks(page).subscribe((pagination) => {
+        this.tasks = of(pagination.items);
+        this.currentPage = pagination.currentPage;
+        this.totalPages = pagination.totalPages;
+      });
+    }
+  }
+
+  handleAskedPage(page: number): void {
+    this.currentPage = page;
+    this.getTasksByPage(this.currentPage)
+  }
 }

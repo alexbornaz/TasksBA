@@ -17,7 +17,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -78,20 +78,21 @@ public class TaskServiceTests {
     public void getAssignedTasks_UserExists() throws UserNotFoundException {
         task1.getAssignedTo().setUsername(username);
         task2.getAssignedTo().setUsername(username);
+        Pageable pageable = PageRequest.of(0,4,Sort.by(Sort.Direction.DESC, "dueDate"));
         when(userService.getUserByUsername(username)).thenReturn(Optional.of(task1.getAssignedTo()));
-        when(taskRepository.findAllByAssignedToOrderByDueDateDesc(task1.getAssignedTo())).thenReturn(tasks);
+        when(taskRepository.findAllByAssignedTo(task1.getAssignedTo(),pageable)).thenReturn(new PageImpl<>(tasks,pageable,2));
 
-        List<Task> result = taskService.getAssignedTasks(username);
+        Page<Task> result = taskService.getAssignedTasks(username,1);
 
-        assertEquals(tasks, result);
-        verify(taskRepository).findAllByAssignedToOrderByDueDateDesc(task1.getAssignedTo());
+        assertEquals(tasks, result.getContent());
+        verify(taskRepository).findAllByAssignedTo(task1.getAssignedTo(),pageable);
     }
 
     @Test
     public void getAssignedTasks_UserDoesNotExists() {
         when(userService.getUserByUsername(username)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> taskService.getAssignedTasks(username));
+        assertThrows(UserNotFoundException.class, () -> taskService.getAssignedTasks(username,1));
     }
 
     @Test

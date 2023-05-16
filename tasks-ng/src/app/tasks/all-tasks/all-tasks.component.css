@@ -14,3 +14,9 @@
   height: 91vh;
   overflow-y: auto;
 }
+
+.no-tasks {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}

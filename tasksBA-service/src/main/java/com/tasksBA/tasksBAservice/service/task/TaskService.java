@@ -4,15 +4,14 @@ import com.tasksBA.tasksBAservice.dto.requests.SearchReq;
 import com.tasksBA.tasksBAservice.dto.requests.TaskDTO;
 import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface TaskService {
-    List<Task> getAll();
+    Page<Task> getAll(int page);
 
     Task getTask(Long id);
 
-    List<Task> getAssignedTasks(String username) throws UserNotFoundException;
+    Page<Task> getAssignedTasks(String username, int page) throws UserNotFoundException;
 
     void createTask(TaskDTO taskDTO) throws UserNotFoundException;
 
@@ -20,5 +19,5 @@ public interface TaskService {
 
     void editTask(TaskDTO taskDTO) throws UserNotFoundException;
 
-    List<Task> searchTasks(SearchReq searchReq);
+    Page<Task> searchTasks(SearchReq searchReq, int page);
 }

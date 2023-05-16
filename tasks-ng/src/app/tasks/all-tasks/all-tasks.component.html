@@ -7,7 +7,7 @@
     <div class="col-md-9">
       <div class="tasks-container mt-2">
         <div *ngIf="(tasks | async)?.length; else noTasks">
-          <table class="table">
+          <table class="table fixed-size-table">
             <thead>
             <tr class="thead-row">
               <th scope="col">Subject</th>
@@ -18,17 +18,21 @@
             </thead>
             <tbody>
             <tr class="table-row" *ngFor="let task of tasks | async" [routerLink]="['/tasks',task.id]">
-              <td>{{ task.subject }}</td>
+              <td class="text-truncate">{{ task.subject }}</td>
               <td>{{ task.dueDate}}</td>
               <td>{{ task.status }}</td>
               <td>{{task.assignedTo.username}}</td>
             </tr>
             </tbody>
           </table>
+          <app-pagination [currentPage]=this.currentPage [totalPages]=this.totalPages
+                          (askedPage)="handleAskedPage($event)"></app-pagination>
         </div>
       </div>
       <ng-template #noTasks>
-        <p>There are no tasks.</p>
+        <div class="d-flex align-items-center justify-content-center" style="height: 90vh;">
+          <h4>There are no tasks.</h4>
+        </div>
       </ng-template>
     </div>
   </div>

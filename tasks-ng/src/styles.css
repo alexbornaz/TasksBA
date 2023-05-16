@@ -7,10 +7,14 @@
   cursor: pointer;
 }
 
-body{
+body {
   background-color: aliceblue;
 }
 
-.thead-row{
+.thead-row {
   border: black solid 1px;
+}
+
+.fixed-size-table {
+  table-layout: fixed;
 }

@@ -10,11 +10,10 @@ import com.tasksBA.tasksBAservice.repository.TaskRepository;
 import com.tasksBA.tasksBAservice.service.EmailService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -33,8 +32,12 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public List<Task> getAll() {
-        return taskRepository.findAll(Sort.by(Sort.Direction.DESC, "dueDate"));
+    public Page<Task> getAll(int page) {
+        int actualPage = page - 1;
+        Pageable pageable = PageRequest.of(actualPage, 4, Sort.by(Sort.Direction.DESC, "dueDate"));
+        Page<Task> tasks = taskRepository.findAll(pageable);
+        long totalCount = tasks.getTotalElements();
+        return new PageImpl<>(tasks.getContent(), pageable, totalCount);
     }
 
     @Override
@@ -44,11 +47,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> getAssignedTasks(String username) throws UserNotFoundException {
+    public Page<Task> getAssignedTasks(String username, int page) throws UserNotFoundException {
+        int actualPage = page - 1;
         User assignedToUser = userService.getUserByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         try {
-            return taskRepository.findAllByAssignedToOrderByDueDateDesc(assignedToUser);
+            Pageable pageable = PageRequest.of(actualPage, 4, Sort.by(Sort.Direction.DESC, "dueDate"));
+            Page<Task> tasks = taskRepository.findAllByAssignedTo(assignedToUser, pageable);
+            long totalCount = tasks.getTotalElements();
+            return new PageImpl<>(tasks.getContent(), pageable, totalCount);
         } catch (Exception e) {
             log.error("Could not fetch the tasks for: {}", username, e);
             throw new RuntimeException("Could not fetch the tasks for: " + username);
@@ -141,11 +148,17 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> searchTasks(SearchReq searchReq) {
+    public Page<Task> searchTasks(SearchReq searchReq, int page) {
+        int actualPage = page - 1;
         String username = searchReq.getAssignedTo();
         String subject = searchReq.getSubject();
         Status status = searchReq.getStatus();
         LocalDate dueDate = searchReq.getDueDate();
-        return taskRepository.findTasksBySearchReq(username, subject, status, dueDate);
+        Pageable pageable = PageRequest.of(actualPage, 4, Sort.by(Sort.Direction.DESC, "dueDate"));
+
+        Page<Task> tasks = taskRepository.findTasksBySearchReq(username, subject, status, dueDate, pageable);
+        long totalCount = tasks.getTotalElements();
+
+        return new PageImpl<>(tasks.getContent(), pageable, totalCount);
     }
 }

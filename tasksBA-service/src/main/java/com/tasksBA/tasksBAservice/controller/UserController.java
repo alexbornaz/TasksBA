@@ -5,6 +5,7 @@ import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
 import com.tasksBA.tasksBAservice.service.user.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,8 @@ public class UserController {
     }
 
     @GetMapping("/tasks/{username}")
-    public ResponseEntity<?> getAssignedTasks(@PathVariable String username) throws UserNotFoundException {
-        List<Task> tasks = taskService.getAssignedTasks(username);
+    public ResponseEntity<?> getAssignedTasks(@PathVariable String username, @RequestParam(defaultValue = "1") int page) throws UserNotFoundException {
+        Page<Task> tasks = taskService.getAssignedTasks(username, page);
         return ResponseEntity.ok().body(tasks);
     }
 

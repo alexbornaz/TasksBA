@@ -22,7 +22,7 @@ const JWT_Module_Options: JwtModuleOptions = {
 @NgModule({
   declarations: [
     AppComponent,
-    GenericModalComponent
+    GenericModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +35,7 @@ const JWT_Module_Options: JwtModuleOptions = {
     BrowserAnimationsModule
   ],
   providers: [],
+  exports: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -7,10 +7,9 @@ import com.tasksBA.tasksBAservice.exceptions.UserNotFoundException;
 import com.tasksBA.tasksBAservice.model.Task;
 import com.tasksBA.tasksBAservice.service.task.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -29,8 +28,8 @@ public class TaskController {
     }
 
     @GetMapping()
-    ResponseEntity<List<Task>> getAllTasks() {
-        List<Task> tasks = taskService.getAll();
+    ResponseEntity<Page<Task>> getAllTasks(@RequestParam(defaultValue = "1") int page) {
+        Page<Task> tasks = taskService.getAll(page);
         return ResponseEntity.ok().body(tasks);
     }
 
@@ -47,8 +46,8 @@ public class TaskController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<?> getSearchedTasks(@RequestBody SearchReq searchReq) {
-        List<Task> tasks = taskService.searchTasks(searchReq);
+    public ResponseEntity<?> getSearchedTasks(@RequestBody SearchReq searchReq, @RequestParam int page) {
+        Page<Task> tasks = taskService.searchTasks(searchReq, page);
         return ResponseEntity.ok().body(tasks);
     }
 

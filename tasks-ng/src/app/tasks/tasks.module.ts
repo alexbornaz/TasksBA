@@ -7,6 +7,7 @@ import {AllTasksComponent} from './all-tasks/all-tasks.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {NewTaskComponent} from './new-task/new-task.component';
 import {SearchTaskComponent} from './search-task/search-task.component';
+import {PaginationComponent} from "../pagination/pagination.component";
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
     AllTasksComponent,
     NewTaskComponent,
     SearchTaskComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
